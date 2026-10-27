@@ -20,6 +20,7 @@ const LITESCRAPE_KEY = process.env.LITESCRAPE_API_KEY || '';
 const LITESCRAPE_BASE = (process.env.LITESCRAPE_BASE || 'https://litescrape.com').replace(/\/$/, '');
 const VIA_SERVICE = !!(TEMPLATE || LITESCRAPE_KEY);
 // Direct requests must be slow to avoid bot blocking; a scraping service rotates IPs so can go faster.
+const FETCH_MODE = LITESCRAPE_KEY ? 'litescrape' : TEMPLATE ? 'url-template' : 'direct (no scraping-service secret found)';
 const DELAY_MS = Number(process.env.DELAY_MS || (VIA_SERVICE ? 1500 : 6000));
 const MIN_OK_SHARE = 0.8; // below this, keep the old feed and fail the run
 
@@ -111,6 +112,7 @@ const typeOf = f => PRICE.includes(f) ? 'price' : STOCK.includes(f) ? 'stock' : 
 
 async function main() {
   fs.mkdirSync(DATA, { recursive: true });
+  log('fetch mode: ' + FETCH_MODE);
   const prevRows = fs.existsSync(FEED) ? parseCSV(fs.readFileSync(FEED, 'utf8')) : [];
   const prev = new Map(prevRows.map(r => [r.sku, r]));
   const prevByProduct = new Map();
@@ -142,7 +144,7 @@ async function main() {
   }
 
   const okProducts = urls.length - failed.length;
-  const report = { run_utc: now, products_in_sitemap: urls.length, products_ok: okProducts, products_failed: failed.length, failed };
+  const report = { run_utc: now, fetch_mode: FETCH_MODE, products_in_sitemap: urls.length, products_ok: okProducts, products_failed: failed.length, failed };
   if (!LIMIT && okProducts < urls.length * MIN_OK_SHARE) {
     report.result = 'aborted: too many failures, previous feed kept';
     fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify(report, null, 2));
@@ -200,7 +202,7 @@ main().catch(e => {
   console.error(e);
   try {
     fs.mkdirSync(DATA, { recursive: true });
-    fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify({ run_utc: now, result: 'error', error: String(e?.stack || e), cause: String(e?.cause || '') }, null, 2));
+    fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify({ run_utc: now, fetch_mode: FETCH_MODE, result: 'error', error: String(e?.stack || e), cause: String(e?.cause || '') }, null, 2));
   } catch {}
   process.exit(1);
 });
