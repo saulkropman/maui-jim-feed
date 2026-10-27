@@ -27,7 +27,8 @@ const MIN_OK_SHARE = 0.8; // below this, keep the old feed and fail the run
 const FEED = path.join(DATA, 'maui-jim-us-products.csv');
 const now = new Date().toISOString();
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const log = (...a) => console.log(new Date().toISOString().slice(11, 19), ...a);
+const LOG = [];
+const log = (...a) => { const line = [new Date().toISOString().slice(11, 19), ...a].join(' '); LOG.push(line); if (LOG.length > 60) LOG.shift(); console.log(line); };
 
 // ---------- CSV ----------
 const q = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
@@ -57,14 +58,16 @@ const HEADERS = {
 // Litescrape returns JSON; we ask only for <script> tags, which hold all the product data.
 async function litescrape(url, kind) {
   const body = kind === 'page'
-    ? { url, respond_with: 'html', engine: 'curl', target_selector: ['script'], assert_status_code: 200, locale: 'en-US' }
-    : { url, respond_with: 'html', engine: 'curl', assert_status_code: 200, locale: 'en-US' };
-  const res = await fetch(LITESCRAPE_BASE + '/api/web/fetch?timeout=80', {
-    method: 'POST', signal: AbortSignal.timeout(95000),
+    ? { url, respond_with: 'html', engine: 'curl', target_selector: ['script'], assert_status_code: 200, timeout: 90 }
+    : { url, respond_with: 'html', engine: 'curl', assert_status_code: 200, timeout: 90 };
+  const t0 = Date.now();
+  const res = await fetch(LITESCRAPE_BASE + '/api/web/fetch', {
+    method: 'POST', signal: AbortSignal.timeout(130000),
     headers: { authorization: 'Bearer ' + LITESCRAPE_KEY, 'content-type': 'application/json', accept: 'application/json' },
     body: JSON.stringify(body),
   });
   const raw = await res.text();
+  log(`litescrape ${res.status} ${((Date.now() - t0) / 1000).toFixed(1)}s ${raw.length}B ${url}`);
   if (!res.ok) {
     if (/status|404/i.test(raw) && /404/.test(raw)) return { status: 404, text: '' };
     throw new Error(`Litescrape HTTP ${res.status} for ${url}: ${raw.slice(0, 300).replace(/\s+/g, ' ')}`);
@@ -78,7 +81,7 @@ async function get(url, tries = 3, kind = 'page') {
     let last;
     for (let t = 1; t <= tries; t++) {
       try { return await litescrape(url, kind); }
-      catch (e) { last = e; console.error(`try ${t} ${url}: ${e.message} ${e.cause || ''}`); await sleep(5000 * t * t); }
+      catch (e) { last = e; log(`try ${t} ${url}: ${e.message} ${e.cause || ''}`); await sleep(5000 * t * t); }
     }
     throw last;
   }
@@ -90,7 +93,7 @@ async function get(url, tries = 3, kind = 'page') {
       if (res.status === 404) return { status: 404, text: '' };
       if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}: ${(await res.text()).slice(0, 300).replace(/\s+/g, ' ')}`);
       return { status: res.status, text: await res.text() };
-    } catch (e) { last = e; console.error(`try ${t} ${url}: ${e.message} ${e.cause || ""}`); await sleep(5000 * t * t); }
+    } catch (e) { last = e; log(`try ${t} ${url}: ${e.message} ${e.cause || ""}`); await sleep(5000 * t * t); }
   }
   throw last;
 }
@@ -113,6 +116,12 @@ const typeOf = f => PRICE.includes(f) ? 'price' : STOCK.includes(f) ? 'stock' : 
 async function main() {
   fs.mkdirSync(DATA, { recursive: true });
   log('fetch mode: ' + FETCH_MODE);
+  if (LITESCRAPE_KEY) { // free call: confirms the key and API address before any paid fetches
+    const r = await fetch(LITESCRAPE_BASE + '/api/keys/status', { headers: { authorization: 'Bearer ' + LITESCRAPE_KEY, accept: 'application/json' }, signal: AbortSignal.timeout(30000) });
+    const body = (await r.text()).slice(0, 300);
+    log(`litescrape key status ${r.status}: ${body}`);
+    if (!r.ok) throw new Error(`Litescrape key check failed: HTTP ${r.status} ${body}`);
+  }
   const prevRows = fs.existsSync(FEED) ? parseCSV(fs.readFileSync(FEED, 'utf8')) : [];
   const prev = new Map(prevRows.map(r => [r.sku, r]));
   const prevByProduct = new Map();
@@ -146,7 +155,7 @@ async function main() {
   const okProducts = urls.length - failed.length;
   const report = { run_utc: now, fetch_mode: FETCH_MODE, products_in_sitemap: urls.length, products_ok: okProducts, products_failed: failed.length, failed };
   if (!LIMIT && okProducts < urls.length * MIN_OK_SHARE) {
-    report.result = 'aborted: too many failures, previous feed kept';
+    report.result = 'aborted: too many failures, previous feed kept'; report.log = LOG;
     fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify(report, null, 2));
     console.error(report.result); process.exit(1);
   }
@@ -202,7 +211,7 @@ main().catch(e => {
   console.error(e);
   try {
     fs.mkdirSync(DATA, { recursive: true });
-    fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify({ run_utc: now, fetch_mode: FETCH_MODE, result: 'error', error: String(e?.stack || e), cause: String(e?.cause || '') }, null, 2));
+    fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify({ run_utc: now, fetch_mode: FETCH_MODE, result: 'error', error: String(e?.stack || e), cause: String(e?.cause || ''), log: LOG }, null, 2));
   } catch {}
   process.exit(1);
 });
