@@ -15,8 +15,12 @@ const LIMIT = Number(process.env.LIMIT || 0);
 // Optional: route requests through a scraping service if the site blocks the runner.
 // Example: https://api.scraperapi.com/?api_key=KEY&country_code=us&url={url}
 const TEMPLATE = process.env.SCRAPER_URL_TEMPLATE || '';
+// Litescrape (https://litescrape.com): set LITESCRAPE_API_KEY to route every page through it.
+const LITESCRAPE_KEY = process.env.LITESCRAPE_API_KEY || '';
+const LITESCRAPE_BASE = (process.env.LITESCRAPE_BASE || 'https://litescrape.com').replace(/\/$/, '');
+const VIA_SERVICE = !!(TEMPLATE || LITESCRAPE_KEY);
 // Direct requests must be slow to avoid bot blocking; a scraping service rotates IPs so can go faster.
-const DELAY_MS = Number(process.env.DELAY_MS || (TEMPLATE ? 1500 : 6000));
+const DELAY_MS = Number(process.env.DELAY_MS || (VIA_SERVICE ? 1500 : 6000));
 const MIN_OK_SHARE = 0.8; // below this, keep the old feed and fail the run
 
 const FEED = path.join(DATA, 'maui-jim-us-products.csv');
@@ -49,7 +53,34 @@ const HEADERS = {
   'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
   'accept-language': 'en-US,en;q=0.9',
 };
-async function get(url, tries = 3) {
+// Litescrape returns JSON; we ask only for <script> tags, which hold all the product data.
+async function litescrape(url, kind) {
+  const body = kind === 'page'
+    ? { url, respond_with: 'html', engine: 'curl', target_selector: ['script'], assert_status_code: 200, locale: 'en-US' }
+    : { url, respond_with: 'html', engine: 'curl', assert_status_code: 200, locale: 'en-US' };
+  const res = await fetch(LITESCRAPE_BASE + '/api/web/fetch?timeout=80', {
+    method: 'POST', signal: AbortSignal.timeout(95000),
+    headers: { authorization: 'Bearer ' + LITESCRAPE_KEY, 'content-type': 'application/json', accept: 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const raw = await res.text();
+  if (!res.ok) {
+    if (/status|404/i.test(raw) && /404/.test(raw)) return { status: 404, text: '' };
+    throw new Error(`Litescrape HTTP ${res.status} for ${url}: ${raw.slice(0, 300).replace(/\s+/g, ' ')}`);
+  }
+  let j; try { j = JSON.parse(raw); } catch { return { status: 200, text: raw }; }
+  return { status: 200, text: j.html ?? j.content ?? j.text ?? raw };
+}
+
+async function get(url, tries = 3, kind = 'page') {
+  if (LITESCRAPE_KEY) {
+    let last;
+    for (let t = 1; t <= tries; t++) {
+      try { return await litescrape(url, kind); }
+      catch (e) { last = e; console.error(`try ${t} ${url}: ${e.message} ${e.cause || ''}`); await sleep(5000 * t * t); }
+    }
+    throw last;
+  }
   const target = TEMPLATE ? TEMPLATE.replace('{url}', encodeURIComponent(url)) : url;
   let last;
   for (let t = 1; t <= tries; t++) {
@@ -64,9 +95,9 @@ async function get(url, tries = 3) {
 }
 
 async function productUrls() {
-  const { text } = await get(BASE + '/sitemap/en-us.xml');
-  const urls = [...text.matchAll(/<loc>\s*([^<\s]+)\s*<\/loc>/g)].map(m => m[1].replace(/&amp;/g, '&').replace(/\/$/, ''))
-    .filter(u => /^https:\/\/www\.mauijim\.com\/shop\//.test(u));
+  const { text } = await get(BASE + '/sitemap/en-us.xml', 3, 'sitemap');
+  // Match URLs anywhere in the response, so it works whether the XML comes back raw or reformatted.
+  const urls = [...text.matchAll(/https:\/\/www\.mauijim\.com\/shop\/[^\s<>"'&]+/g)].map(m => m[0].replace(/\/$/, ''));
   if (urls.length < 50) throw new Error(`Sitemap looks wrong: only ${urls.length} product URLs`);
   return [...new Set(urls)];
 }

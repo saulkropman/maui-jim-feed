@@ -30,9 +30,14 @@ and compares it with the last run.
 ## Setup: scraping service (required)
 
 Maui Jim's bot protection blocks GitHub's servers (tested 28 Oct 2026: connection timed
-out). Pages must go through a scraping service with US IPs. Add a repo secret
-(Settings > Secrets and variables > Actions > New repository secret) named
-`SCRAPER_URL_TEMPLATE`. `{url}` is replaced with each page address. Examples:
+out). Pages must go through a scraping service. Add a repo secret
+(Settings > Secrets and variables > Actions > New repository secret):
+
+**Litescrape (in use):** secret `LITESCRAPE_API_KEY` = your key (starts `ls_live_`).
+About $0.00015 per page, so roughly $2 a month. Only successful fetches are billed.
+
+**Or another service:** secret `SCRAPER_URL_TEMPLATE`, where `{url}` is replaced with
+each page address. Examples:
 
 - ScraperAPI: `https://api.scraperapi.com/?api_key=YOUR_KEY&country_code=us&url={url}`
 - ScrapingBee: `https://app.scrapingbee.com/api/v1/?api_key=YOUR_KEY&render_js=false&country_code=us&url={url}`

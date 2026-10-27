@@ -31,7 +31,9 @@ jobs:
         env:
           LIMIT: ${{ github.event.inputs.limit || '0' }}
           # Required: the site blocks GitHub's servers, so pages go through a scraping service.
+          # Set LITESCRAPE_API_KEY (preferred) or SCRAPER_URL_TEMPLATE as a repo secret.
           SCRAPER_URL_TEMPLATE: ${{ secrets.SCRAPER_URL_TEMPLATE }}
+          LITESCRAPE_API_KEY: ${{ secrets.LITESCRAPE_API_KEY }}
         run: node src/run.mjs
       - name: Save results to the repo
         if: always()
