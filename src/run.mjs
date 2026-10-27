@@ -254,7 +254,7 @@ async function main() {
   }
   for (const c of changes) c.run_utc = now;
 
-  const cols = [...COLUMNS, 'last_checked_utc', 'last_changed_utc'];
+  const cols = COLUMNS;
   next.sort((a, b) => a.product_url.localeCompare(b.product_url) || a.sku.localeCompare(b.sku));
   const changeCols = ['run_utc', 'change_type', 'sku', 'product_name', 'field', 'old_value', 'new_value'];
   fs.writeFileSync(FEED, toCSV(cols, next));

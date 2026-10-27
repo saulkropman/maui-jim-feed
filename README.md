@@ -21,8 +21,10 @@ checked and refetched (up to 8 times) until it is the US store.
 | `run-report.json` | Counts and any failed pages for the latest run. |
 
 `change_type` is one of `price`, `stock`, `content` (description, images, names, sizes),
-`reviews`, `new_sku`, `removed_sku`. Each feed row has `last_checked_utc` and
-`last_changed_utc`.
+`reviews`, `new_sku`, `removed_sku`.
+
+`image_urls` is a JSON array, e.g. `["https://...1.jpg","https://...2.jpg"]`.
+`main_image_url` is the first image. Prices are always USD (pages in other currencies are rejected).
 
 ## Safety
 

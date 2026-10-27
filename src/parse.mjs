@@ -130,7 +130,7 @@ export function parseProduct(html, productUrl) {
       size: (size.description || '').split('\n')[0].replace(/^Size:\s*/, ''), temple_mm: meas.Temple || '', eye_mm: meas.Eye || '', bridge_mm: meas.Bridge || '',
       lens_height_mm: meas.Height || '', base_curve: meas.Base || '',
       description: htmlToText(info.richDescription) || ld.description || '',
-      all_frame_colours: allColours, main_image_url: images[0] || '', image_urls: images.join(' | '), image_alt_texts: alts.join(' | '),
+      all_frame_colours: allColours, main_image_url: images[0] || '', image_urls: JSON.stringify(images), image_alt_texts: alts.join(' | '),
       swatch_image_url: sw.image || '', variant_url: vurl.href,
     };
     // Reader (magnification) versions are separate SKUs with their own price/stock.
@@ -172,9 +172,9 @@ function summary(r) {
 }
 
 export const COLUMNS = ['product_name', 'category', 'sub_category', 'sku', 'manufacturer_product_number', 'variant_code', 'reader_power',
-  'frame_colour', 'lens_colour', 'lens_material', 'lens_treatment', 'price', 'was_price', 'currency', 'in_stock', 'stock_message',
+  'frame_colour', 'lens_colour', 'lens_material', 'lens_treatment', 'price', 'was_price', 'in_stock', 'stock_message',
   'gender', 'frame_material', 'frame_style', 'size', 'temple_mm', 'eye_mm', 'bridge_mm', 'lens_height_mm', 'base_curve',
   'rating', 'review_count', 'badges', 'description', 'ai_summary', 'all_frame_colours', 'main_image_url', 'image_urls',
-  'image_alt_texts', 'swatch_image_url', 'frame_colour_id', 'product_url', 'variant_url', 'fitting_guide_url'];
+  'frame_colour_id', 'product_url', 'variant_url'];
 
 export { BASE };
