@@ -1,5 +1,5 @@
 {
-  "run_utc": "2026-10-27T22:13:59.231Z",
+  "run_utc": "2026-10-27T23:31:44.999Z",
   "fetch_mode": "litescrape",
   "product_sources": {
     "sunglasses-product-grouping": "ok"
@@ -7,26 +7,20 @@
   "products_new_from_listing": [],
   "products_gone": [],
   "products_checked": 173,
-  "products_ok": 172,
-  "products_failed": 1,
-  "failed": [
-    {
-      "url": "https://www.mauijim.com/shop/sunglasses/cateye/hulah",
-      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/cateye/hulah: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
-    }
-  ],
+  "products_ok": 173,
+  "products_failed": 0,
+  "failed": [],
   "result": "ok",
-  "litescrape_calls": 324,
-  "litescrape_not_us_retries": 131,
+  "litescrape_calls": 307,
+  "litescrape_not_us_retries": 118,
   "skus": 1797,
-  "skus_changed": 44,
+  "skus_changed": 16,
   "changes": {
     "price": 0,
-    "stock": 0,
+    "stock": 4,
     "content": 0,
-    "reviews": 0,
-    "new_sku": 44,
+    "reviews": 12,
+    "new_sku": 0,
     "removed_sku": 0
-  },
-  "note": "reviews false positives (number vs text) removed by hand after run"
+  }
 }
