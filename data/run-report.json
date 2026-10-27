@@ -1,6 +1,7 @@
 {
-  "run_utc": "2026-10-27T21:27:23.531Z",
+  "run_utc": "2026-10-27T21:34:15.009Z",
+  "fetch_mode": "litescrape",
   "result": "error",
-  "error": "TypeError: fetch failed\n    at node:internal/deps/undici/undici:15456:13\n    at async get (file:///home/runner/work/maui-jim-feed/maui-jim-feed/src/run.mjs:88:19)\n    at async productUrls (file:///home/runner/work/maui-jim-feed/maui-jim-feed/src/run.mjs:98:20)\n    at async main (file:///home/runner/work/maui-jim-feed/maui-jim-feed/src/run.mjs:120:14)",
-  "cause": "Error: read ETIMEDOUT"
+  "error": "TypeError: fetch failed\n    at node:internal/deps/undici/undici:15270:13\n    at async litescrape (file:///home/runner/work/maui-jim-feed/maui-jim-feed/src/run.mjs:62:15)\n    at async get (file:///home/runner/work/maui-jim-feed/maui-jim-feed/src/run.mjs:80:20)\n    at async productUrls (file:///home/runner/work/maui-jim-feed/maui-jim-feed/src/run.mjs:99:20)\n    at async main (file:///home/runner/work/maui-jim-feed/maui-jim-feed/src/run.mjs:122:14)",
+  "cause": "Error: read ECONNRESET"
 }
