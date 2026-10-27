@@ -24,14 +24,21 @@ and compares it with the last run.
   kept and the run is marked as failed.
 - A product whose page fails keeps its previous rows. It is only marked removed when it
   leaves the sitemap.
-- Pages are fetched one at a time, about 6 to 8 seconds apart (around 20 minutes per run).
-  Faster requests trigger the site's bot protection.
+- Pages are fetched one at a time: about 1.5 seconds apart through a scraping service,
+  or 6 seconds apart for direct requests (direct only works from a home connection).
 
-## If the site blocks GitHub
+## Setup: scraping service (required)
 
-Create a repo secret `SCRAPER_URL_TEMPLATE` with a scraping service URL where `{url}`
-is the page to fetch, for example:
-`https://api.scraperapi.com/?api_key=YOUR_KEY&country_code=us&url={url}`
+Maui Jim's bot protection blocks GitHub's servers (tested 28 Oct 2026: connection timed
+out). Pages must go through a scraping service with US IPs. Add a repo secret
+(Settings > Secrets and variables > Actions > New repository secret) named
+`SCRAPER_URL_TEMPLATE`. `{url}` is replaced with each page address. Examples:
+
+- ScraperAPI: `https://api.scraperapi.com/?api_key=YOUR_KEY&country_code=us&url={url}`
+- ScrapingBee: `https://app.scrapingbee.com/api/v1/?api_key=YOUR_KEY&render_js=false&country_code=us&url={url}`
+
+The service must return the raw page HTML (no JavaScript rendering needed).
+About 180 pages per run, twice a day: roughly 11,000 requests a month.
 
 ## Run by hand
 

@@ -11,11 +11,12 @@ import path from 'node:path';
 import { parseProduct, COLUMNS, BASE } from './parse.mjs';
 
 const DATA = path.resolve(process.env.DATA_DIR || 'data');
-const DELAY_MS = Number(process.env.DELAY_MS || 6000);
 const LIMIT = Number(process.env.LIMIT || 0);
 // Optional: route requests through a scraping service if the site blocks the runner.
 // Example: https://api.scraperapi.com/?api_key=KEY&country_code=us&url={url}
 const TEMPLATE = process.env.SCRAPER_URL_TEMPLATE || '';
+// Direct requests must be slow to avoid bot blocking; a scraping service rotates IPs so can go faster.
+const DELAY_MS = Number(process.env.DELAY_MS || (TEMPLATE ? 1500 : 6000));
 const MIN_OK_SHARE = 0.8; // below this, keep the old feed and fail the run
 
 const FEED = path.join(DATA, 'maui-jim-us-products.csv');

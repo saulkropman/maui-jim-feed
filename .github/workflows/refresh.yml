@@ -30,8 +30,7 @@ jobs:
       - name: Scrape and compare
         env:
           LIMIT: ${{ github.event.inputs.limit || '0' }}
-          DELAY_MS: '6000'
-          # Optional: set this repo secret only if the site starts blocking GitHub's servers.
+          # Required: the site blocks GitHub's servers, so pages go through a scraping service.
           SCRAPER_URL_TEMPLATE: ${{ secrets.SCRAPER_URL_TEMPLATE }}
         run: node src/run.mjs
       - name: Save results to the repo
