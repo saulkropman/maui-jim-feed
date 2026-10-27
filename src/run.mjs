@@ -55,9 +55,9 @@ async function get(url, tries = 3) {
     try {
       const res = await fetch(target, { headers: TEMPLATE ? {} : HEADERS, signal: AbortSignal.timeout(90000) });
       if (res.status === 404) return { status: 404, text: '' };
-      if (!res.ok) throw new Error('HTTP ' + res.status);
+      if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}: ${(await res.text()).slice(0, 300).replace(/\s+/g, ' ')}`);
       return { status: res.status, text: await res.text() };
-    } catch (e) { last = e; await sleep(5000 * t * t); }
+    } catch (e) { last = e; console.error(`try ${t} ${url}: ${e.message} ${e.cause || ""}`); await sleep(5000 * t * t); }
   }
   throw last;
 }
@@ -164,4 +164,11 @@ async function main() {
   log(JSON.stringify({ ...report, failed: failed.length }));
 }
 
-main().catch(e => { console.error(e); process.exit(1); });
+main().catch(e => {
+  console.error(e);
+  try {
+    fs.mkdirSync(DATA, { recursive: true });
+    fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify({ run_utc: now, result: 'error', error: String(e?.stack || e), cause: String(e?.cause || '') }, null, 2));
+  } catch {}
+  process.exit(1);
+});
