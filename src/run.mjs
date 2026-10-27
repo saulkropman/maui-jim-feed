@@ -64,7 +64,9 @@ const isUSPage = html => {
 };
 const isUSApi = text => { try { const j = JSON.parse(text); return (j.products || []).every(p => !p.prices || p.prices.currency === 'USD'); } catch { return false; } };
 
+let LS_CALLS = 0, LS_NOT_US = 0;
 async function litescrapeOnce(url, kind) {
+  LS_CALLS++;
   const body = kind === 'page'
     ? { url, respond_with: 'html', engine: 'curl', target_selector: ['script'], assert_status_code: 200, timeout: 90 }
     : { url, respond_with: 'text', engine: 'curl', assert_status_code: 200, timeout: 90 };
@@ -89,7 +91,7 @@ async function litescrape(url, kind) {
   for (let a = 1; a <= 8; a++) {
     const r = await litescrapeOnce(url, kind);
     if (r.status === 404 || isUS(r.text)) return r;
-    log(`not the US store (try ${a}), retrying ${url}`);
+    LS_NOT_US++; log(`not the US store (try ${a}), retrying ${url}`);
   }
   throw new Error('could not get the US store after 8 tries');
 }
@@ -205,12 +207,21 @@ async function main() {
     }
   };
   await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+  // Second pass: give failed pages one more go after a short break.
+  if (failed.length && failed.length <= urls.length * 0.2) {
+    const retry = failed.splice(0).map(f => f.url);
+    log(`second pass for ${retry.length} failed pages`);
+    await sleep(Number(process.env.SECOND_PASS_WAIT_MS ?? 30000));
+    urls.push(...retry); // the workers read from urls[cursor]
+    await Promise.all(Array.from({ length: Math.min(CONCURRENCY, retry.length) }, worker));
+    urls.splice(urls.length - retry.length);
+  }
   if (!LIMIT) fs.writeFileSync(URLS_FILE, allUrls.filter(u => !gone.includes(u)).join('\n') + '\n');
 
   const okProducts = urls.length - failed.length - gone.length;
   const report = { run_utc: now, fetch_mode: FETCH_MODE, product_sources: sources, products_new_from_listing: added, products_gone: gone, products_checked: urls.length, products_ok: okProducts, products_failed: failed.length, failed };
   if (!LIMIT && okProducts < (urls.length - gone.length) * MIN_OK_SHARE) {
-    report.result = 'aborted: too many failures, previous feed kept'; report.log = LOG;
+    report.result = 'aborted: too many failures, previous feed kept'; report.log = LOG; report.litescrape_calls = LS_CALLS;
     fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify(report, null, 2));
     console.error(report.result); process.exit(1);
   }
@@ -255,7 +266,7 @@ async function main() {
 
   const count = t => changes.filter(c => c.change_type === t).length;
   Object.assign(report, {
-    result: 'ok', skus: next.length, skus_changed: changedSkus.size,
+    result: 'ok', litescrape_calls: LS_CALLS, litescrape_not_us_retries: LS_NOT_US, skus: next.length, skus_changed: changedSkus.size,
     changes: { price: count('price'), stock: count('stock'), content: count('content'), reviews: count('reviews'), new_sku: count('new_sku'), removed_sku: count('removed_sku') },
   });
   fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify(report, null, 2));
