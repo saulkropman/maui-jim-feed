@@ -1,0 +1,51 @@
+name: Refresh Maui Jim US feed
+
+on:
+  schedule:
+    # 6:17am and 6:17pm Brisbane (UTC+10)
+    - cron: '17 20,8 * * *'
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Only scrape this many products (0 = all). For testing.'
+        required: false
+        default: '0'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Scrape and compare
+        env:
+          LIMIT: ${{ github.event.inputs.limit || '0' }}
+          DELAY_MS: '6000'
+          # Optional: set this repo secret only if the site starts blocking GitHub's servers.
+          SCRAPER_URL_TEMPLATE: ${{ secrets.SCRAPER_URL_TEMPLATE }}
+        run: node src/run.mjs
+      - name: Save results to the repo
+        if: always()
+        run: |
+          git config user.name "maui-feed-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data
+          if git diff --cached --quiet; then echo "Nothing changed"; exit 0; fi
+          git commit -m "Feed refresh $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: maui-jim-feed
+          path: data/
+          retention-days: 14

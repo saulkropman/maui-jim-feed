@@ -1,0 +1,11 @@
+{
+  "name": "maui-jim-feed",
+  "private": true,
+  "type": "module",
+  "description": "Twice-daily Maui Jim US product feed with change tracking",
+  "scripts": {
+    "refresh": "node src/run.mjs",
+    "test": "node test/mock-run.mjs"
+  },
+  "engines": { "node": ">=20" }
+}
