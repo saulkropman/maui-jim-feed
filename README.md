@@ -1,8 +1,14 @@
 # Maui Jim US product feed
 
 Runs on GitHub Actions at 6:17am and 6:17pm Brisbane time. Each run fetches every
-product in the US sitemap (www.mauijim.com/sitemap/en-us.xml), builds one row per SKU,
-and compares it with the last run.
+known product page, builds one row per SKU, and compares it with the last run.
+
+The product list is `data/product-urls.txt`. Each run adds new products found in the
+site's product API (`/api/products/by-category`) and drops pages that return 404.
+Accessories and apparel are not in that API, so new ones must be added to the file by hand.
+
+Litescrape's servers are worldwide and Maui Jim serves the local store, so every page is
+checked and refetched (up to 8 times) until it is the US store.
 
 ## Files (in `data/`)
 

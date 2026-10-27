@@ -21,6 +21,7 @@ const LITESCRAPE_BASE = (process.env.LITESCRAPE_API_URL || 'https://api.litescra
 const VIA_SERVICE = !!(TEMPLATE || LITESCRAPE_KEY);
 // Direct requests must be slow to avoid bot blocking; a scraping service rotates IPs so can go faster.
 const FETCH_MODE = LITESCRAPE_KEY ? 'litescrape' : TEMPLATE ? 'url-template' : 'direct (no scraping-service secret found)';
+const CONCURRENCY = Number(process.env.CONCURRENCY || (LITESCRAPE_KEY ? 3 : 1));
 const DELAY_MS = Number(process.env.DELAY_MS || (VIA_SERVICE ? 1500 : 6000));
 const MIN_OK_SHARE = 0.8; // below this, keep the old feed and fail the run
 
@@ -55,11 +56,18 @@ const HEADERS = {
   'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
   'accept-language': 'en-US,en;q=0.9',
 };
-// Litescrape returns JSON; we ask only for <script> tags, which hold all the product data.
-async function litescrape(url, kind) {
+// Litescrape picks a server anywhere in the world, and Maui Jim serves the store for that
+// country. So every response is checked and retried until it is the US store.
+const isUSPage = html => {
+  const m = html.match(/"@type"\s*:\s*"Product"[\s\S]{0,400}?"url"\s*:\s*"([^"]+)"/);
+  return !m || !/mauijim\.com\/[a-z]{2}-[a-z]+\//i.test(m[1]);
+};
+const isUSApi = text => { try { const j = JSON.parse(text); return (j.products || []).every(p => !p.prices || p.prices.currency === 'USD'); } catch { return false; } };
+
+async function litescrapeOnce(url, kind) {
   const body = kind === 'page'
     ? { url, respond_with: 'html', engine: 'curl', target_selector: ['script'], assert_status_code: 200, timeout: 90 }
-    : { url, respond_with: 'html', engine: 'curl', assert_status_code: 200, timeout: 90 };
+    : { url, respond_with: 'text', engine: 'curl', assert_status_code: 200, timeout: 90 };
   const t0 = Date.now();
   const res = await fetch(LITESCRAPE_BASE + '/api/web/fetch', {
     method: 'POST', signal: AbortSignal.timeout(130000),
@@ -69,11 +77,21 @@ async function litescrape(url, kind) {
   const raw = await res.text();
   log(`litescrape ${res.status} ${((Date.now() - t0) / 1000).toFixed(1)}s ${raw.length}B ${url}`);
   if (!res.ok) {
-    if (/status|404/i.test(raw) && /404/.test(raw)) return { status: 404, text: '' };
+    if (/\b404\b/.test(raw)) return { status: 404, text: '' };
     throw new Error(`Litescrape HTTP ${res.status} for ${url}: ${raw.slice(0, 300).replace(/\s+/g, ' ')}`);
   }
   let j; try { j = JSON.parse(raw); } catch { return { status: 200, text: raw }; }
-  return { status: 200, text: j.html ?? j.content ?? j.text ?? raw };
+  return { status: 200, text: j.html ?? j.text ?? j.content ?? '' };
+}
+
+async function litescrape(url, kind) {
+  const isUS = kind === 'page' ? isUSPage : isUSApi;
+  for (let a = 1; a <= 8; a++) {
+    const r = await litescrapeOnce(url, kind);
+    if (r.status === 404 || isUS(r.text)) return r;
+    log(`not the US store (try ${a}), retrying ${url}`);
+  }
+  throw new Error('could not get the US store after 8 tries');
 }
 
 async function get(url, tries = 3, kind = 'page') {
@@ -81,7 +99,7 @@ async function get(url, tries = 3, kind = 'page') {
     let last;
     for (let t = 1; t <= tries; t++) {
       try { return await litescrape(url, kind); }
-      catch (e) { last = e; log(`try ${t} ${url}: ${e.message} ${e.cause || ''}`); await sleep(5000 * t * t); }
+      catch (e) { last = e; log(`try ${t} ${url}: ${e.message} ${e.cause || ''}`); await sleep(5000 * t); }
     }
     throw last;
   }
@@ -98,12 +116,41 @@ async function get(url, tries = 3, kind = 'page') {
   throw last;
 }
 
-async function productUrls() {
-  const { text } = await get(BASE + '/sitemap/en-us.xml', 3, 'sitemap');
-  // Match URLs anywhere in the response, so it works whether the XML comes back raw or reformatted.
-  const urls = [...text.matchAll(/https:\/\/www\.mauijim\.com\/shop\/[^\s<>"'&]+/g)].map(m => m[0].replace(/\/$/, ''));
-  if (urls.length < 50) throw new Error(`Sitemap looks wrong: only ${urls.length} product URLs`);
-  return [...new Set(urls)];
+// ---------- product list ----------
+// Litescrape can't load the XML sitemap, so the product list is:
+//   1. data/product-urls.txt (known products, kept up to date by each run)
+//   2. plus new products found in the site's product API (names convert to page addresses)
+//   3. plus the sitemap, when it can be loaded (direct or URL-template mode)
+const URLS_FILE = path.join(DATA, 'product-urls.txt');
+const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const LISTINGS = (process.env.LISTING_CATEGORIES || 'sunglasses-product-grouping').split(',').map(s => s.trim()).filter(Boolean);
+
+async function productUrls(prevRows) {
+  const known = new Set(fs.existsSync(URLS_FILE) ? fs.readFileSync(URLS_FILE, 'utf8').split(/\r?\n/).map(s => s.trim()).filter(Boolean) : []);
+  for (const r of prevRows) if (r.product_url) known.add(r.product_url);
+  const found = new Set(), sources = {};
+  for (const cat of LISTINGS) {
+    try {
+      for (let page = 0, pages = 1; page < pages && page < 20; page++) {
+        const { text } = await get(`${BASE}/api/products/by-category?categoryName=${cat}&locale=en-us&currentPage=${page}&pageSize=100`, 3, 'api');
+        const j = JSON.parse(text);
+        pages = j.pagination?.totalPages || 1;
+        for (const p of j.products || []) if (p.name && p.frameStyleCode) found.add(`${BASE}/shop/${p.frameStyleCode.replace('_', '/')}/${slug(p.name)}`);
+      }
+      sources[cat] = 'ok';
+    } catch (e) { sources[cat] = 'failed: ' + e.message; log(`listing ${cat} failed: ${e.message}`); }
+  }
+  if (!LITESCRAPE_KEY) {
+    try {
+      const { text } = await get(BASE + '/sitemap/en-us.xml', 3, 'sitemap');
+      for (const m of text.matchAll(/https:\/\/www\.mauijim\.com\/shop\/[^\s<>"'&]+/g)) found.add(m[0].replace(/\/$/, ''));
+      sources.sitemap = 'ok';
+    } catch (e) { sources.sitemap = 'failed: ' + e.message; }
+  }
+  const added = [...found].filter(u => !known.has(u));
+  const urls = [...new Set([...known, ...found])].sort();
+  if (urls.length < 50) throw new Error(`Product list looks wrong: only ${urls.length} product URLs (${JSON.stringify(sources)})`);
+  return { urls, added, sources };
 }
 
 // ---------- diff ----------
@@ -128,33 +175,41 @@ async function main() {
   for (const r of prevRows) { if (!prevByProduct.has(r.product_url)) prevByProduct.set(r.product_url, []); prevByProduct.get(r.product_url).push(r); }
   log(`previous feed: ${prevRows.length} SKUs`);
 
-  let urls = await productUrls();
-  if (LIMIT) urls = urls.slice(0, LIMIT);
-  log(`sitemap: ${urls.length} products`);
+  const { urls: allUrls, added, sources } = await productUrls(prevRows);
+  let urls = allUrls;
+  if (LIMIT) urls = [...added, ...allUrls.filter(u => !added.includes(u))].slice(0, LIMIT);
+  log(`products: ${urls.length} to fetch (${added.length} new from listing) ${JSON.stringify(sources)}`);
 
-  const fresh = [], failed = [];
-  let streak = 0;
-  for (const [i, url] of urls.entries()) {
-    try {
-      const { status, text } = await get(url);
-      if (status === 404) { failed.push({ url, error: 'HTTP 404' }); continue; }
-      const { rows, ok, reason } = parseProduct(text, url);
-      if (!ok) throw new Error(reason);
-      if (rows.some(r => r.currency && r.currency !== 'USD')) throw new Error('not USD prices: ' + rows[0].currency);
-      fresh.push(...rows.map(r => ({ ...r, last_checked_utc: now })));
-      streak = 0;
-    } catch (e) {
-      failed.push({ url, error: String(e.message || e) });
-      log(`FAIL ${url}: ${e.message || e}`);
-      if (++streak >= 5) { log('5 failures in a row: likely blocked, pausing 10 minutes'); await sleep(600000); streak = 0; }
+  const fresh = [], failed = [], gone = [];
+  let streak = 0, cursor = 0, done = 0;
+  const worker = async () => {
+    while (cursor < urls.length) {
+      const url = urls[cursor++];
+      try {
+        const { status, text } = await get(url);
+        if (status === 404) { gone.push(url); log(`GONE ${url}`); }
+        else {
+          const { rows, ok, reason } = parseProduct(text, url);
+          if (!ok) throw new Error(reason);
+          if (rows.some(r => r.currency && r.currency !== 'USD')) throw new Error('not USD prices: ' + rows[0].currency);
+          fresh.push(...rows.map(r => ({ ...r, last_checked_utc: now })));
+          streak = 0;
+        }
+      } catch (e) {
+        failed.push({ url, error: String(e.message || e) });
+        log(`FAIL ${url}: ${e.message || e}`);
+        if (!VIA_SERVICE && ++streak >= 5) { log('5 failures in a row: likely blocked, pausing 10 minutes'); await sleep(600000); streak = 0; }
+      }
+      if (++done % 20 === 0) log(`${done}/${urls.length} done, ${fresh.length} SKUs`);
+      await sleep(DELAY_MS * (1 + Math.random() * 0.3));
     }
-    if ((i + 1) % 20 === 0) log(`${i + 1}/${urls.length} done, ${fresh.length} SKUs`);
-    await sleep(DELAY_MS * (1 + Math.random() * 0.3));
-  }
+  };
+  await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+  if (!LIMIT) fs.writeFileSync(URLS_FILE, allUrls.filter(u => !gone.includes(u)).join('\n') + '\n');
 
-  const okProducts = urls.length - failed.length;
-  const report = { run_utc: now, fetch_mode: FETCH_MODE, products_in_sitemap: urls.length, products_ok: okProducts, products_failed: failed.length, failed };
-  if (!LIMIT && okProducts < urls.length * MIN_OK_SHARE) {
+  const okProducts = urls.length - failed.length - gone.length;
+  const report = { run_utc: now, fetch_mode: FETCH_MODE, product_sources: sources, products_new_from_listing: added, products_gone: gone, products_checked: urls.length, products_ok: okProducts, products_failed: failed.length, failed };
+  if (!LIMIT && okProducts < (urls.length - gone.length) * MIN_OK_SHARE) {
     report.result = 'aborted: too many failures, previous feed kept'; report.log = LOG;
     fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify(report, null, 2));
     console.error(report.result); process.exit(1);
@@ -204,7 +259,7 @@ async function main() {
     changes: { price: count('price'), stock: count('stock'), content: count('content'), reviews: count('reviews'), new_sku: count('new_sku'), removed_sku: count('removed_sku') },
   });
   fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify(report, null, 2));
-  log(JSON.stringify({ ...report, failed: failed.length }));
+  log(JSON.stringify({ ...report, failed: failed.length, products_new_from_listing: added.length }));
 }
 
 main().catch(e => {
