@@ -17,7 +17,7 @@ const LIMIT = Number(process.env.LIMIT || 0);
 const TEMPLATE = process.env.SCRAPER_URL_TEMPLATE || '';
 // Litescrape (https://litescrape.com): set LITESCRAPE_API_KEY to route every page through it.
 const LITESCRAPE_KEY = process.env.LITESCRAPE_API_KEY || '';
-const LITESCRAPE_BASE = (process.env.LITESCRAPE_BASE || 'https://litescrape.com').replace(/\/$/, '');
+const LITESCRAPE_BASE = (process.env.LITESCRAPE_API_URL || 'https://api.litescrape.com').replace(/\/$/, '');
 const VIA_SERVICE = !!(TEMPLATE || LITESCRAPE_KEY);
 // Direct requests must be slow to avoid bot blocking; a scraping service rotates IPs so can go faster.
 const FETCH_MODE = LITESCRAPE_KEY ? 'litescrape' : TEMPLATE ? 'url-template' : 'direct (no scraping-service secret found)';
