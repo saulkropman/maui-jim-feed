@@ -1,5 +1,5 @@
 {
-  "run_utc": "2026-10-27T21:58:52.526Z",
+  "run_utc": "2026-10-27T22:13:59.231Z",
   "fetch_mode": "litescrape",
   "product_sources": {
     "sunglasses-product-grouping": "ok"
@@ -7,31 +7,25 @@
   "products_new_from_listing": [],
   "products_gone": [],
   "products_checked": 173,
-  "products_ok": 170,
-  "products_failed": 3,
+  "products_ok": 172,
+  "products_failed": 1,
   "failed": [
     {
-      "url": "https://www.mauijim.com/shop/sunglasses/classic/kalaunu-asian-fit",
-      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/kalaunu-asian-fit: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
-    },
-    {
-      "url": "https://www.mauijim.com/shop/sunglasses/classic/kapeau",
-      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/kapeau: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
-    },
-    {
-      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/k-kua",
-      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/k-kua: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+      "url": "https://www.mauijim.com/shop/sunglasses/cateye/hulah",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/cateye/hulah: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
     }
   ],
   "result": "ok",
-  "skus": 1753,
-  "skus_changed": 0,
+  "litescrape_calls": 324,
+  "litescrape_not_us_retries": 131,
+  "skus": 1797,
+  "skus_changed": 1741,
   "changes": {
     "price": 0,
     "stock": 0,
     "content": 0,
-    "reviews": 0,
-    "new_sku": 0,
+    "reviews": 3394,
+    "new_sku": 44,
     "removed_sku": 0
   }
 }
