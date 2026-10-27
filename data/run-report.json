@@ -19,13 +19,14 @@
   "litescrape_calls": 324,
   "litescrape_not_us_retries": 131,
   "skus": 1797,
-  "skus_changed": 1741,
+  "skus_changed": 44,
   "changes": {
     "price": 0,
     "stock": 0,
     "content": 0,
-    "reviews": 3394,
+    "reviews": 0,
     "new_sku": 44,
     "removed_sku": 0
-  }
+  },
+  "note": "reviews false positives (number vs text) removed by hand after run"
 }

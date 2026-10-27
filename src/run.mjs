@@ -239,8 +239,8 @@ async function main() {
     if (!p) { if (prevRows.length) { changes.push({ change_type: 'new_sku', sku: r.sku, product_name: r.product_name, field: '', old_value: '', new_value: r.price }); changedSkus.add(r.sku); } r.last_changed_utc = now; continue; }
     let diff = false;
     for (const f of COLUMNS) {
-      if (IGNORE.has(f) || (p[f] ?? '') === (r[f] ?? '')) continue;
-      changes.push({ change_type: typeOf(f), sku: r.sku, product_name: r.product_name, field: f, old_value: p[f] ?? '', new_value: r[f] ?? '' });
+      if (IGNORE.has(f) || String(p[f] ?? '') === String(r[f] ?? '')) continue;
+      changes.push({ change_type: typeOf(f), sku: r.sku, product_name: r.product_name, field: f, old_value: String(p[f] ?? ''), new_value: String(r[f] ?? '') });
       diff = true;
     }
     r.last_changed_utc = diff ? now : (p.last_changed_utc || now);
