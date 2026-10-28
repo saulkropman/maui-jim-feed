@@ -154,7 +154,11 @@ export function parseProduct(html, productUrl) {
   // A product can list the same SKU twice; keep the first.
   const seen = new Set();
   const rows = out.filter(r => !seen.has(r.sku) && seen.add(r.sku));
-  for (const r of rows) r.ai_summary = summary(r);
+  for (const r of rows) {
+    // variant_code is always the variantCode in the variant link (reader rows share their colour's code).
+    r.variant_code = new URL(r.variant_url).searchParams.get('variantCode') || r.variant_code;
+    r.ai_summary = summary(r);
+  }
   return { rows, ok: rows.length > 0, reason: rows.length ? '' : 'no variants' };
 }
 
@@ -171,7 +175,7 @@ function summary(r) {
   return b.join('. ').replace(/\s+/g, ' ') + '.';
 }
 
-export const COLUMNS = ['product_name', 'category', 'sub_category', 'sku', 'manufacturer_product_number', 'variant_code', 'reader_power',
+export const COLUMNS = ['product_name', 'variant_code', 'category', 'sub_category', 'sku', 'manufacturer_product_number', 'reader_power',
   'frame_colour', 'lens_colour', 'lens_material', 'lens_treatment', 'price', 'was_price', 'in_stock', 'stock_message',
   'gender', 'frame_material', 'frame_style', 'size', 'temple_mm', 'eye_mm', 'bridge_mm', 'lens_height_mm', 'base_curve',
   'rating', 'review_count', 'badges', 'description', 'ai_summary', 'all_frame_colours', 'main_image_url', 'image_urls',

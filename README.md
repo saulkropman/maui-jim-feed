@@ -14,7 +14,7 @@ checked and refetched (up to 8 times) until it is the US store.
 
 | File | What it is |
 |---|---|
-| `maui-jim-us-products.csv` | Full feed. One row per SKU, including reader (magnification) SKUs. |
+| `maui-jim-us-products.csv` | Full feed. One row per SKU, including reader (magnification) SKUs. `variant_code` is the `variantCode` in the variant link (reader rows share their colour's code). |
 | `latest-changed-rows.csv` | Full rows for SKUs that are new or changed in the latest run. Use this for incremental updates. |
 | `latest-changes.csv` | What changed in the latest run: SKU, field, old value, new value. |
 | `change-log.csv` | Every change ever recorded. |
