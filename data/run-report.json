@@ -26,6 +26,7 @@
     "content": 44,
     "reviews": 36,
     "new_sku": 0,
-    "removed_sku": 53
-  }
+    "removed_sku": 0
+  },
+  "note": "4 products wrongly marked gone (country-specific 404s via Litescrape); restored by hand 29 Oct"
 }

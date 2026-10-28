@@ -93,14 +93,18 @@ export function parseProduct(html, productUrl) {
     product_url: productUrl,
     rating: o?.rating?.averageRating ?? ld.aggregateRating?.ratingValue ?? '',
     review_count: o?.rating?.reviewCount ?? ld.aggregateRating?.reviewCount ?? '',
-    badges: arr(o?.badges).map(b => b.label || b.text || b.displayName || b).join(' | '),
+    badges: arr(o?.badges).map(b => b.label || b.text || b.displayName || b).sort().join(' | '),
     fitting_guide_url: clean(o?.fittingGuideHref),
     currency: o?.priceCurrency || offer.priceCurrency || '',
   };
   const swatches = arr(o?.frameColorSwatches);
   const allColours = swatches.map(s => s.label).join(' | ');
   const fv = o?.frameColorVariants;
-  const variants = fv && typeof fv === 'object' && Object.keys(fv).length ? Object.entries(fv) : [[o?.defaultFrameColorId || '', o || {}]];
+  // Some products list a colour twice (e.g. "11" and "11::HT807-1115"). Plain swatch ids first,
+  // so the same copy wins every run.
+  const variants = fv && typeof fv === 'object' && Object.keys(fv).length
+    ? Object.entries(fv).sort(([a], [b]) => (a.includes('::') - b.includes('::')) || a.localeCompare(b))
+    : [[o?.defaultFrameColorId || '', o || {}]];
   const out = [];
   for (const [cid, v] of variants) {
     const acc = Array.isArray(v.accordionItems) ? v.accordionItems : arr(o?.accordionItems);

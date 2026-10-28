@@ -88,9 +88,13 @@ async function litescrapeOnce(url, kind) {
 
 async function litescrape(url, kind) {
   const isUS = kind === 'page' ? isUSPage : isUSApi;
+  // A product not sold in the country Litescrape lands in returns 404 there, so a 404 is
+  // only believed after several tries from different servers.
+  let notFound = 0;
   for (let a = 1; a <= 8; a++) {
     const r = await litescrapeOnce(url, kind);
-    if (r.status === 404 || isUS(r.text)) return r;
+    if (r.status === 404) { if (++notFound >= 5) return r; log(`404 (try ${a}), retrying ${url}`); continue; }
+    if (isUS(r.text)) return r;
     LS_NOT_US++; log(`not the US store (try ${a}), retrying ${url}`);
   }
   throw new Error('could not get the US store after 8 tries');
@@ -152,7 +156,7 @@ async function productUrls(prevRows) {
   const added = [...found].filter(u => !known.has(u));
   const urls = [...new Set([...known, ...found])].sort();
   if (urls.length < 50) throw new Error(`Product list looks wrong: only ${urls.length} product URLs (${JSON.stringify(sources)})`);
-  return { urls, added, sources };
+  return { urls, added, sources, listed: found };
 }
 
 // ---------- diff ----------
@@ -178,7 +182,10 @@ async function main() {
   for (const r of prevRows) { if (!prevByProduct.has(r.product_url)) prevByProduct.set(r.product_url, []); prevByProduct.get(r.product_url).push(r); }
   log(`previous feed: ${prevRows.length} SKUs`);
 
-  const { urls: allUrls, added, sources } = await productUrls(prevRows);
+  const { urls: allUrls, added, sources, listed } = await productUrls(prevRows);
+  const MISSING_FILE = path.join(DATA, 'missing.json');
+  const missingBefore = fs.existsSync(MISSING_FILE) ? JSON.parse(fs.readFileSync(MISSING_FILE, 'utf8')) : {};
+  const missingNow = {}, notFoundKept = [];
   let urls = allUrls;
   if (LIMIT) urls = [...added, ...allUrls.filter(u => !added.includes(u))].slice(0, LIMIT);
   log(`products: ${urls.length} to fetch (${added.length} new from listing) ${JSON.stringify(sources)}`);
@@ -190,7 +197,12 @@ async function main() {
       const url = urls[cursor++];
       try {
         const { status, text } = await get(url);
-        if (status === 404) { gone.push(url); log(`GONE ${url}`); }
+        if (status === 404) {
+          // Only drop a product after two runs in a row of 404s, and never while the US product API still lists it.
+          missingNow[url] = (missingBefore[url] || 0) + 1;
+          if (missingNow[url] >= 2 && !listed.has(url)) { gone.push(url); log(`GONE ${url}`); }
+          else { notFoundKept.push(url); log(`404 but keeping for now (${missingNow[url]} run(s)) ${url}`); }
+        }
         else {
           const { rows, ok, reason } = parseProduct(text, url);
           if (!ok) throw new Error(reason);
@@ -217,18 +229,22 @@ async function main() {
     await Promise.all(Array.from({ length: Math.min(CONCURRENCY, retry.length) }, worker));
     urls.splice(urls.length - retry.length);
   }
-  if (!LIMIT) fs.writeFileSync(URLS_FILE, allUrls.filter(u => !gone.includes(u)).join('\n') + '\n');
+  if (!LIMIT) {
+    fs.writeFileSync(URLS_FILE, allUrls.filter(u => !gone.includes(u)).join('\n') + '\n');
+    for (const u of gone) delete missingNow[u];
+    fs.writeFileSync(MISSING_FILE, JSON.stringify(missingNow, null, 2) + '\n');
+  }
 
-  const okProducts = urls.length - failed.length - gone.length;
-  const report = { run_utc: now, fetch_mode: FETCH_MODE, product_sources: sources, products_new_from_listing: added, products_gone: gone, products_checked: urls.length, products_ok: okProducts, products_failed: failed.length, failed };
-  if (!LIMIT && okProducts < (urls.length - gone.length) * MIN_OK_SHARE) {
+  const okProducts = urls.length - failed.length - gone.length - notFoundKept.length;
+  const report = { run_utc: now, fetch_mode: FETCH_MODE, product_sources: sources, products_new_from_listing: added, products_gone: gone, products_404_kept: notFoundKept, products_checked: urls.length, products_ok: okProducts, products_failed: failed.length, failed };
+  if (!LIMIT && okProducts < (urls.length - gone.length - notFoundKept.length) * MIN_OK_SHARE) {
     report.result = 'aborted: too many failures, previous feed kept'; report.log = LOG; report.litescrape_calls = LS_CALLS;
     fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify(report, null, 2));
     console.error(report.result); process.exit(1);
   }
 
   // Products that failed this run keep their previous rows (marked by older last_checked_utc).
-  const failedUrls = new Set(failed.map(f => f.url));
+  const failedUrls = new Set([...failed.map(f => f.url), ...notFoundKept]);
   const carried = [...failedUrls].flatMap(u => prevByProduct.get(u) || []);
   const live = new Set(urls);
   const next = [...fresh, ...carried];
