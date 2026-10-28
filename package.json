@@ -5,7 +5,7 @@
   "description": "Twice-daily Maui Jim US product feed with change tracking",
   "scripts": {
     "refresh": "node src/run.mjs",
-    "test": "node test/mock-run.mjs"
+    "test": "node test/parse-dup-colour.mjs && node test/mock-run.mjs"
   },
   "engines": { "node": ">=20" }
 }

@@ -100,15 +100,24 @@ export function parseProduct(html, productUrl) {
   const swatches = arr(o?.frameColorSwatches);
   const allColours = swatches.map(s => s.label).join(' | ');
   const fv = o?.frameColorVariants;
-  // Some products list a colour twice (e.g. "11" and "11::HT807-1115"). Plain swatch ids first,
-  // so the same copy wins every run.
+  // Some products list a colour more than once (e.g. "Z0021", "Z0021::R758-02", "Z0021::758-02").
+  // Colours shown as options on the page (swatches) win, in page order; extras come last, so the
+  // same copy wins every run and a bare extra entry can't overwrite a real colour's details.
+  const swatchIds = swatches.map(s => s.id);
+  const rank = id => (swatchIds.includes(id) ? swatchIds.indexOf(id) : 1000 + (id.includes('::') ? 0 : 1));
   const variants = fv && typeof fv === 'object' && Object.keys(fv).length
-    ? Object.entries(fv).sort(([a], [b]) => (a.includes('::') - b.includes('::')) || a.localeCompare(b))
+    ? Object.entries(fv).sort(([a], [b]) => rank(a) - rank(b) || a.localeCompare(b))
     : [[o?.defaultFrameColorId || '', o || {}]];
   const out = [];
   for (const [cid, v] of variants) {
-    const acc = Array.isArray(v.accordionItems) ? v.accordionItems : arr(o?.accordionItems);
-    const f = facts(acc);
+    const code = clean(v.productCode || o?.productCode) || clean(ld.sku);
+    // Shared details (description, sizes, materials) may come from the product's default colour,
+    // but SKU, lens and frame colour must come from this colour's own data.
+    const ownAcc = Array.isArray(v.accordionItems) && v.accordionItems.length ? v.accordionItems : null;
+    const acc = ownAcc || arr(o?.accordionItems);
+    const fAll = facts(acc);
+    const fOwn = ownAcc ? fAll : (code && code === clean(o?.productCode) ? fAll : {});
+    const f = { ...fAll, SKU: fOwn['SKU'], 'Lens Color': fOwn['Lens Color'], 'Frame Color': fOwn['Frame Color'], 'Lens Treatment': fOwn['Lens Treatment'] ?? fAll['Lens Treatment'] };
     const sw = swatches.find(s => s.id === cid) || {};
     const info = acc.find(a => a.id === 'additional-information') || {};
     const size = acc.find(a => a.id === 'size-and-fit') || {};
@@ -118,8 +127,9 @@ export function parseProduct(html, productUrl) {
     let images = media.map(m => m.src).filter(Boolean);
     if (!images.length) images = [...new Set([ld.image].flat().filter(Boolean).map(i => typeof i === 'string' ? i : i.url || i.contentUrl))];
     const alts = media.map(m => m.alt || '');
-    const code = clean(v.productCode || o?.productCode) || clean(ld.sku);
-    const [sku, mpn = ''] = (f['SKU'] || code).split('/');
+    // The SKU fact must belong to this colour; otherwise use the colour's own product code.
+    const skuFact = f['SKU'] && f['SKU'].split('/')[0].trim() === code ? f['SKU'] : '';
+    const [sku, mpn = ''] = (skuFact || code).split('/');
     const vurl = new URL(productUrl); if (cid) vurl.searchParams.set('frameColor', cid); if (code) vurl.searchParams.set('variantCode', code);
     const inStock = v.inStock ?? o?.inStock;
     const stockYes = inStock === undefined || inStock === '$undefined' ? (offer.availability ? /InStock/.test(offer.availability) : '') : !!inStock;
