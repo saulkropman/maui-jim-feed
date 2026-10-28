@@ -55,8 +55,6 @@ https://www.mauijim.com/shop/sunglasses/classic/kaulike
 https://www.mauijim.com/shop/sunglasses/classic/kawika
 https://www.mauijim.com/shop/sunglasses/classic/kawika-xl
 https://www.mauijim.com/shop/sunglasses/classic/kenui
-https://www.mauijim.com/shop/sunglasses/classic/kikonia
-https://www.mauijim.com/shop/sunglasses/classic/kikonia-xl
 https://www.mauijim.com/shop/sunglasses/classic/koko-head
 https://www.mauijim.com/shop/sunglasses/classic/lawena
 https://www.mauijim.com/shop/sunglasses/classic/lele-kawa
@@ -71,7 +69,6 @@ https://www.mauijim.com/shop/sunglasses/classic/olali-af
 https://www.mauijim.com/shop/sunglasses/classic/p-ali-af
 https://www.mauijim.com/shop/sunglasses/classic/pehu
 https://www.mauijim.com/shop/sunglasses/classic/pukaua
-https://www.mauijim.com/shop/sunglasses/classic/punikai
 https://www.mauijim.com/shop/sunglasses/classic/wailua
 https://www.mauijim.com/shop/sunglasses/classic/welo
 https://www.mauijim.com/shop/sunglasses/fashion/cloud-break
@@ -137,7 +134,6 @@ https://www.mauijim.com/shop/sunglasses/rimless/laulima-asian-fit
 https://www.mauijim.com/shop/sunglasses/rimless/lighthouse
 https://www.mauijim.com/shop/sunglasses/rimless/makaha
 https://www.mauijim.com/shop/sunglasses/rimless/makaha-reader
-https://www.mauijim.com/shop/sunglasses/rimless/makaha-reader-asian-fit
 https://www.mauijim.com/shop/sunglasses/rimless/ohai
 https://www.mauijim.com/shop/sunglasses/rimless/paluna
 https://www.mauijim.com/shop/sunglasses/rimless/sandy-beach
