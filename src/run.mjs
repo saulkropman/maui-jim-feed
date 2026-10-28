@@ -167,9 +167,10 @@ async function main() {
   log('fetch mode: ' + FETCH_MODE);
   if (LITESCRAPE_KEY) { // free call: confirms the key and API address before any paid fetches
     const r = await fetch(LITESCRAPE_BASE + '/api/keys/status', { headers: { authorization: 'Bearer ' + LITESCRAPE_KEY, accept: 'application/json' }, signal: AbortSignal.timeout(30000) });
-    const body = (await r.text()).slice(0, 300);
-    log(`litescrape key status ${r.status}: ${body}`);
-    if (!r.ok) throw new Error(`Litescrape key check failed: HTTP ${r.status} ${body}`);
+    // Log only the call balance: run logs are public on a public repo.
+    let info = {}; try { info = await r.json(); } catch {}
+    log(`litescrape key check ${r.status}: status=${info.status ?? '?'} remaining_calls=${info.remaining_calls ?? '?'}`);
+    if (!r.ok) throw new Error(`Litescrape key check failed: HTTP ${r.status} ${info.error_code || info.error || ''}`);
   }
   const prevRows = fs.existsSync(FEED) ? parseCSV(fs.readFileSync(FEED, 'utf8')) : [];
   const prev = new Map(prevRows.map(r => [r.sku, r]));
