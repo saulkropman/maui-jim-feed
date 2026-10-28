@@ -1,32 +1,27 @@
 {
-  "run_utc": "2026-10-28T15:05:19.502Z",
+  "run_utc": "2026-10-28T22:57:45.129Z",
   "fetch_mode": "litescrape",
   "product_sources": {
     "sunglasses-product-grouping": "ok"
   },
   "products_new_from_listing": [],
-  "products_gone": [
-    "https://www.mauijim.com/shop/sunglasses/classic/kikonia-xl",
-    "https://www.mauijim.com/shop/sunglasses/classic/kikonia",
-    "https://www.mauijim.com/shop/sunglasses/classic/punikai",
-    "https://www.mauijim.com/shop/sunglasses/rimless/makaha-reader-asian-fit"
-  ],
+  "products_gone": [],
+  "products_404_kept": [],
   "products_checked": 173,
-  "products_ok": 169,
+  "products_ok": 173,
   "products_failed": 0,
   "failed": [],
   "result": "ok",
-  "litescrape_calls": 310,
-  "litescrape_not_us_retries": 134,
-  "skus": 1744,
-  "skus_changed": 80,
+  "litescrape_calls": 317,
+  "litescrape_not_us_retries": 128,
+  "skus": 1797,
+  "skus_changed": 47,
   "changes": {
     "price": 0,
-    "stock": 26,
-    "content": 44,
-    "reviews": 36,
+    "stock": 0,
+    "content": 200,
+    "reviews": 0,
     "new_sku": 0,
     "removed_sku": 0
-  },
-  "note": "4 products wrongly marked gone (country-specific 404s via Litescrape); restored by hand 29 Oct"
+  }
 }
