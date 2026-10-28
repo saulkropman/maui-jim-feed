@@ -1,6 +1,9 @@
 # Maui Jim US product feed
 
-Runs on GitHub Actions at 6:17am and 6:17pm Brisbane time. Each run fetches every
+Runs on GitHub Actions at 6:17am and 6:17pm Brisbane time, started by a cron-job.org job
+(cron `17 6,18 * * *`, Australia/Brisbane) that POSTs to the workflow's `dispatches` API
+with a fine-grained token (Actions: read and write, this repo only). The token expires
+26 Jan 2027: make a new one and update the cron job's Authorization header before then. Each run fetches every
 known product page, builds one row per SKU, and compares it with the last run.
 
 The product list is `data/product-urls.txt`. Each run adds new products found in the

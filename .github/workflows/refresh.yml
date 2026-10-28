@@ -1,9 +1,10 @@
 name: Refresh Maui Jim US feed
 
 on:
-  schedule:
-    # 6:17am and 6:17pm Brisbane (UTC+10)
-    - cron: '17 20,8 * * *'
+  # Started at 6:17am and 6:17pm Brisbane by cron-job.org (GitHub's own schedule ran hours late).
+  # Fallback if that ever stops: re-add
+  #   schedule:
+  #     - cron: '17 20,8 * * *'
   workflow_dispatch:
     inputs:
       limit:
@@ -43,7 +44,8 @@ jobs:
           git add data
           if git diff --cached --quiet; then echo "Nothing changed"; exit 0; fi
           git commit -m "Feed refresh $(date -u +%Y-%m-%dT%H:%MZ)"
-          git push
+          # Code may have changed during the run: replay our data commit on top, then push.
+          for i in 1 2 3; do git pull --rebase -X theirs origin main && git push && break; sleep 5; done
       - uses: actions/upload-artifact@v4
         if: always()
         with:
