@@ -1,11 +1,10 @@
 name: Refresh Maui Jim US feed
 
 on:
-  # Main schedule: cron-job.org starts runs at 6:17am and 6:17pm Brisbane.
-  # Backup: GitHub's own schedule at 8:17am / 8:17pm Brisbane (UTC 22:17 / 10:17). It skips itself
-  # if a run already happened in the last 6 hours, so it only does work when cron-job.org didn't.
-  schedule:
-    - cron: '17 22,10 * * *'
+  # Runs are started by cron-job.org at 6:17am and 6:17pm Brisbane.
+  # Optional backup (off): GitHub's own schedule, which skips itself if a run happened in the last 6h:
+  #   schedule:
+  #     - cron: '17 22,10 * * *'
   workflow_dispatch:
     inputs:
       limit:

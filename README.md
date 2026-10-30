@@ -3,10 +3,10 @@
 Runs on GitHub Actions at 6:17am and 6:17pm Brisbane time, started by a cron-job.org job
 (cron `17 6,18 * * *`, Australia/Brisbane) that POSTs to the workflow's `dispatches` API
 with a fine-grained token (Actions: read and write, this repo only). The token expires
-26 Jan 2027: make a new one and update the cron job's Authorization header before then.
+29 Oct 2027: make a new one and update the cron job's Authorization header before then.
 
-Backup: GitHub's own schedule runs at 8:17am and 8:17pm Brisbane but skips itself if a good
-run happened in the last 6 hours (`SKIP_IF_RECENT_HOURS`). GitHub's schedule can run hours late. Each run fetches every
+Backup schedule: off. To turn it on, uncomment `schedule` in the workflow. It runs at 8:17am and
+8:17pm Brisbane and skips itself if a good run happened in the last 6 hours (`SKIP_IF_RECENT_HOURS`). Each run fetches every
 known product page, builds one row per SKU, and compares it with the last run.
 
 The product list is `data/product-urls.txt`. Each run adds new products found in the
