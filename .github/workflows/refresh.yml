@@ -1,10 +1,11 @@
 name: Refresh Maui Jim US feed
 
 on:
-  # Started at 6:17am and 6:17pm Brisbane by cron-job.org (GitHub's own schedule ran hours late).
-  # Fallback if that ever stops: re-add
-  #   schedule:
-  #     - cron: '17 20,8 * * *'
+  # Main schedule: cron-job.org starts runs at 6:17am and 6:17pm Brisbane.
+  # Backup: GitHub's own schedule at 8:17am / 8:17pm Brisbane (UTC 22:17 / 10:17). It skips itself
+  # if a run already happened in the last 6 hours, so it only does work when cron-job.org didn't.
+  schedule:
+    - cron: '17 22,10 * * *'
   workflow_dispatch:
     inputs:
       limit:
@@ -31,6 +32,7 @@ jobs:
       - name: Scrape and compare
         env:
           LIMIT: ${{ github.event.inputs.limit || '0' }}
+          SKIP_IF_RECENT_HOURS: ${{ github.event_name == 'schedule' && '6' || '0' }}
           # Required: the site blocks GitHub's servers, so pages go through a scraping service.
           # Set LITESCRAPE_API_KEY (preferred) or SCRAPER_URL_TEMPLATE as a repo secret.
           SCRAPER_URL_TEMPLATE: ${{ secrets.SCRAPER_URL_TEMPLATE }}

@@ -168,6 +168,16 @@ const typeOf = f => PRICE.includes(f) ? 'price' : STOCK.includes(f) ? 'stock' : 
 
 async function main() {
   fs.mkdirSync(DATA, { recursive: true });
+  // Backup schedule: do nothing if a good run already happened recently.
+  const skipHours = Number(process.env.SKIP_IF_RECENT_HOURS || 0);
+  if (skipHours > 0) {
+    try {
+      const last = JSON.parse(fs.readFileSync(path.join(DATA, 'run-report.json'), 'utf8'));
+      const ageH = (Date.now() - Date.parse(last.run_utc)) / 3600000;
+      if (last.result === 'ok' && ageH < skipHours) { log(`last good run ${ageH.toFixed(1)}h ago: backup run not needed, skipping`); return; }
+      log(`last good run ${ageH.toFixed(1)}h ago (${last.result}): backup run going ahead`);
+    } catch { log('no previous run report: backup run going ahead'); }
+  }
   log('fetch mode: ' + FETCH_MODE);
   if (LITESCRAPE_KEY) { // free call: confirms the key and API address before any paid fetches
     const r = await fetch(LITESCRAPE_BASE + '/api/keys/status', { headers: { authorization: 'Bearer ' + LITESCRAPE_KEY, accept: 'application/json' }, signal: AbortSignal.timeout(30000) });
