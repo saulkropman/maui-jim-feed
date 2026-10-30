@@ -164,6 +164,8 @@ const PRICE = ['price', 'was_price', 'currency'];
 const STOCK = ['in_stock', 'stock_message'];
 const REVIEWS = ['rating', 'review_count'];
 const IGNORE = new Set(['ai_summary', 'last_changed_utc', 'last_checked_utc']);
+const LIST_FIELDS = new Set(['all_frame_colours', 'badges']);
+const sameList = (a, b) => String(a ?? '').split(' | ').sort().join('|') === String(b ?? '').split(' | ').sort().join('|');
 const typeOf = f => PRICE.includes(f) ? 'price' : STOCK.includes(f) ? 'stock' : REVIEWS.includes(f) ? 'reviews' : 'content';
 
 async function main() {
@@ -267,6 +269,7 @@ async function main() {
     let diff = false;
     for (const f of COLUMNS) {
       if (IGNORE.has(f) || String(p[f] ?? '') === String(r[f] ?? '')) continue;
+      if (LIST_FIELDS.has(f) && sameList(p[f], r[f])) continue; // only the order changed
       changes.push({ change_type: typeOf(f), sku: r.sku, product_name: r.product_name, field: f, old_value: String(p[f] ?? ''), new_value: String(r[f] ?? '') });
       diff = true;
     }
