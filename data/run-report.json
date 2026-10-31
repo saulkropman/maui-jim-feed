@@ -1,5 +1,5 @@
 {
-  "run_utc": "2026-10-30T20:17:17.598Z",
+  "run_utc": "2026-10-31T08:17:14.796Z",
   "fetch_mode": "litescrape",
   "product_sources": {
     "sunglasses-product-grouping": "ok"
@@ -12,13 +12,13 @@
   "products_failed": 0,
   "failed": [],
   "result": "ok",
-  "litescrape_calls": 314,
-  "litescrape_not_us_retries": 126,
+  "litescrape_calls": 230,
+  "litescrape_not_us_retries": 52,
   "skus": 1665,
-  "skus_changed": 9,
+  "skus_changed": 12,
   "changes": {
     "price": 0,
-    "stock": 9,
+    "stock": 12,
     "content": 0,
     "reviews": 0,
     "new_sku": 0,
