@@ -1,29 +1,26 @@
 {
-  "run_utc": "2026-11-02T08:17:14.549Z",
+  "run_utc": "2026-11-02T20:17:21.114Z",
   "fetch_mode": "litescrape",
   "product_sources": {
     "sunglasses-product-grouping": "ok"
   },
   "products_new_from_listing": [],
   "products_gone": [],
-  "products_404_kept": [
-    "https://www.mauijim.com/shop/sunglasses/classic/kikonia-xl",
-    "https://www.mauijim.com/shop/sunglasses/rectangular/lehiwa-asian-fit"
-  ],
+  "products_404_kept": [],
   "products_checked": 173,
-  "products_ok": 171,
+  "products_ok": 173,
   "products_failed": 0,
   "failed": [],
   "result": "ok",
-  "litescrape_calls": 482,
-  "litescrape_not_us_retries": 289,
+  "litescrape_calls": 508,
+  "litescrape_not_us_retries": 281,
   "skus": 1665,
-  "skus_changed": 0,
+  "skus_changed": 8,
   "changes": {
     "price": 0,
     "stock": 0,
     "content": 0,
-    "reviews": 0,
+    "reviews": 8,
     "new_sku": 0,
     "removed_sku": 0
   }
