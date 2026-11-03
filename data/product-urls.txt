@@ -11,6 +11,7 @@ https://www.mauijim.com/shop/sunglasses/aviator/baby-beach
 https://www.mauijim.com/shop/sunglasses/aviator/castles
 https://www.mauijim.com/shop/sunglasses/aviator/cliff-house
 https://www.mauijim.com/shop/sunglasses/aviator/guardrails
+https://www.mauijim.com/shop/sunglasses/aviator/h-lawa
 https://www.mauijim.com/shop/sunglasses/aviator/hau-oli
 https://www.mauijim.com/shop/sunglasses/aviator/hau-oli-xl
 https://www.mauijim.com/shop/sunglasses/aviator/hau-oli-xs
@@ -31,6 +32,7 @@ https://www.mauijim.com/shop/sunglasses/cateye/hiwahiwa
 https://www.mauijim.com/shop/sunglasses/cateye/honi
 https://www.mauijim.com/shop/sunglasses/cateye/hulah
 https://www.mauijim.com/shop/sunglasses/cateye/k-kaulani
+https://www.mauijim.com/shop/sunglasses/cateye/k-lawa
 https://www.mauijim.com/shop/sunglasses/cateye/kiopaa
 https://www.mauijim.com/shop/sunglasses/cateye/kou
 https://www.mauijim.com/shop/sunglasses/cateye/lonomea
@@ -40,6 +42,7 @@ https://www.mauijim.com/shop/sunglasses/cateye/olu-olu
 https://www.mauijim.com/shop/sunglasses/cateye/p-nono
 https://www.mauijim.com/shop/sunglasses/classic/aliali
 https://www.mauijim.com/shop/sunglasses/classic/cheetah-5
+https://www.mauijim.com/shop/sunglasses/classic/halakea
 https://www.mauijim.com/shop/sunglasses/classic/hanohano
 https://www.mauijim.com/shop/sunglasses/classic/hiehie
 https://www.mauijim.com/shop/sunglasses/classic/ho-opili
@@ -108,6 +111,7 @@ https://www.mauijim.com/shop/sunglasses/rectangular/okina
 https://www.mauijim.com/shop/sunglasses/rectangular/one-way
 https://www.mauijim.com/shop/sunglasses/rectangular/onshore
 https://www.mauijim.com/shop/sunglasses/rectangular/p-ali
+https://www.mauijim.com/shop/sunglasses/rectangular/paikini
 https://www.mauijim.com/shop/sunglasses/rectangular/pailolo
 https://www.mauijim.com/shop/sunglasses/rectangular/paulele-asian-fit
 https://www.mauijim.com/shop/sunglasses/rectangular/piopio-asian-fit
