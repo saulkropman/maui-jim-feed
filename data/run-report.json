@@ -1,27 +1,787 @@
 {
-  "run_utc": "2026-11-04T08:17:15.576Z",
+  "run_utc": "2026-11-04T20:17:17.023Z",
   "fetch_mode": "litescrape",
   "product_sources": {
-    "sunglasses-product-grouping": "ok"
+    "sunglasses-product-grouping": "failed: Litescrape HTTP 503 for https://www.mauijim.com/api/products/by-category?categoryName=sunglasses-product-grouping&locale=en-us&currentPage=0&pageSize=100: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
   },
   "products_new_from_listing": [],
   "products_gone": [],
   "products_404_kept": [],
   "products_checked": 177,
-  "products_ok": 177,
-  "products_failed": 0,
-  "failed": [],
-  "result": "ok",
-  "litescrape_calls": 215,
-  "litescrape_not_us_retries": 34,
-  "skus": 1688,
-  "skus_changed": 37,
-  "changes": {
-    "price": 0,
-    "stock": 37,
-    "content": 0,
-    "reviews": 0,
-    "new_sku": 0,
-    "removed_sku": 0
-  }
+  "products_ok": 0,
+  "products_failed": 177,
+  "failed": [
+    {
+      "url": "https://www.mauijim.com/shop/accessories/rattan-care-kit",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/accessories/rattan-care-kit: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/accessories/large-trifold-case",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/accessories/large-trifold-case: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/accessories/cablz",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/accessories/cablz: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/accessories/small-trifold-case",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/accessories/small-trifold-case: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/apparel/born-and-raised-bamboo-long-sleeve",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/apparel/born-and-raised-bamboo-long-sleeve: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/apparel/born-and-raised-bamboo-short-sleeve",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/apparel/born-and-raised-bamboo-short-sleeve: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/apparel/born-and-raised-women-s-bamboo-short-sleeve",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/apparel/born-and-raised-women-s-bamboo-short-sleeve: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/aeko",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/aeko: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/apparel/retro-logo-anniversary-tee",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/apparel/retro-logo-anniversary-tee: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/baby-beach",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/baby-beach: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/castles",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/castles: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/cliff-house",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/cliff-house: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/guardrails",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/guardrails: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/h-lawa",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/h-lawa: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/hau-oli",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/hau-oli: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/hau-oli-xl",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/hau-oli-xl: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/hau-oli-xs",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/hau-oli-xs: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/kahana",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/kahana: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/kaupo-gap",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/kaupo-gap: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/keokea",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/keokea: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/mavericks",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/mavericks: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/p-wai-asian-fit",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/p-wai-asian-fit: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/piha",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/piha: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/na-auao",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/na-auao: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/shark-s-cove",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/shark-s-cove: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/seacliff",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/seacliff: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/waiwai",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/waiwai: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/aviator/wiki-wiki",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/aviator/wiki-wiki: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/cateye/blossom",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/cateye/blossom: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/cateye/alulu",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/cateye/alulu: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/cateye/hiwahiwa",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/cateye/hiwahiwa: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/cateye/hulah",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/cateye/hulah: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/cateye/honi",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/cateye/honi: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/cateye/k-kaulani",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/cateye/k-kaulani: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/cateye/kiopaa",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/cateye/kiopaa: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/cateye/k-lawa",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/cateye/k-lawa: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/cateye/kou",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/cateye/kou: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/cateye/lotus",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/cateye/lotus: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/cateye/lonomea",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/cateye/lonomea: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/cateye/ocean",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/cateye/ocean: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/cateye/olu-olu",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/cateye/olu-olu: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/cateye/p-nono",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/cateye/p-nono: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/aliali",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/aliali: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/cheetah-5",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/cheetah-5: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/halakea",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/halakea: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/hanohano",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/hanohano: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/ho-opili",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/ho-opili: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/hiehie",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/hiehie: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/holomua",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/holomua: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/huia",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/huia: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/honua-asian-fit",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/honua-asian-fit: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/kahiko",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/kahiko: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/ka-apeha",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/ka-apeha: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/kalaunu-asian-fit",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/kalaunu-asian-fit: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/kaulike",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/kaulike: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/kapeau",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/kapeau: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/kaulana-asian-fit",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/kaulana-asian-fit: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/kawika",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/kawika: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/kawika-xl",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/kawika-xl: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/kenui",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/kenui: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/kikonia",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/kikonia: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/koko-head",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/koko-head: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/kikonia-xl",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/kikonia-xl: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/lawena",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/lawena: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/makamae",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/makamae: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/lele-kawa",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/lele-kawa: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/maluhia",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/maluhia: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/maoli",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/maoli: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/mana-olana",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/mana-olana: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/melemele",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/melemele: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/momi",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/momi: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/noni",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/noni: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/olali-af",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/olali-af: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/p-ali-af",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/p-ali-af: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/pehu",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/pehu: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/pukaua",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/pukaua: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/punikai",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/punikai: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/wailua",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/wailua: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/classic/welo",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/classic/welo: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/fashion/cloud-break",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/fashion/cloud-break: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/fashion/good-fun",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/fashion/good-fun: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/fashion/hiluhilu",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/fashion/hiluhilu: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/fashion/ka-olu",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/fashion/ka-olu: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/fashion/koki-beach",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/fashion/koki-beach: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/fashion/ku-ikahi-asian-fit",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/fashion/ku-ikahi-asian-fit: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/fashion/liquid-sunshine",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/fashion/liquid-sunshine: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/fashion/lipine",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/fashion/lipine: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/fashion/mekala",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/fashion/mekala: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/fashion/orchid",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/fashion/orchid: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/fashion/nalani",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/fashion/nalani: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/fashion/rooftops",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/fashion/rooftops: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/fashion/tiger-lily",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/fashion/tiger-lily: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/fashion/starfish",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/fashion/starfish: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/luxury/alika",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/luxury/alika: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/luxury/violet-lake",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/luxury/violet-lake: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/anemone",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/anemone: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/black-coral",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/black-coral: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/cruzem",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/cruzem: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/hiapo-asian-fit",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/hiapo-asian-fit: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/honokalani",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/honokalani: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/huelo",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/huelo: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/hulili",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/hulili: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/k-kua",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/k-kua: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/k-welo",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/k-welo: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/kahuna",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/kahuna: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/kuniahi-af",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/kuniahi-af: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/lehiwa-asian-fit",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/lehiwa-asian-fit: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/lehopulu",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/lehopulu: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/moaka",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/moaka: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/okina",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/okina: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/one-way",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/one-way: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/onshore",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/onshore: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/paikini",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/paikini: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/p-ali",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/p-ali: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/pailolo",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/pailolo: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/paulele-asian-fit",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/paulele-asian-fit: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/piopio-asian-fit",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/piopio-asian-fit: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/pokowai-arch",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/pokowai-arch: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/puakea",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/puakea: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/pu-u-kukui",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/pu-u-kukui: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/punchbowl",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/punchbowl: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/red-sands",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/red-sands: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/red-sands-asian-fit",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/red-sands-asian-fit: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/red-sands-xl",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/red-sands-xl: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/the-flats",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rectangular/the-flats: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/banyans",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/banyans: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/banyans-asian-fit",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/banyans-asian-fit: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/breakwall",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/breakwall: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/hema",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/hema: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/ho-okipa",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/ho-okipa: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/ho-okipa-reader",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/ho-okipa-reader: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/ho-okipa-reader-universal-fit",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/ho-okipa-reader-universal-fit: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/ho-okipa-ultra",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/ho-okipa-ultra: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/ho-okipa-ultra-g",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/ho-okipa-ultra-g: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/ho-okipa-universal-fit",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/ho-okipa-universal-fit: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/ho-okipa-xlarge",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/ho-okipa-xlarge: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/kaila",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/kaila: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/lanakila",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/lanakila: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/laulima",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/laulima: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/laulima-asian-fit",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/laulima-asian-fit: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/lighthouse",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/lighthouse: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/makaha",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/makaha: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/makaha-reader",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/makaha-reader: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/makaha-reader-asian-fit",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/makaha-reader-asian-fit: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/sandy-beach",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/sandy-beach: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/ohai",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/ohai: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/paluna",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/paluna: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rimless/sugar-beach",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/rimless/sugar-beach: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/shield/miona-af",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/shield/miona-af: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/shield/miona",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/shield/miona: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/amberjack",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/amberjack: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/shield/palulu",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/shield/palulu: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/alenuihaha",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/alenuihaha: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/byron-bay",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/byron-bay: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/ano-nui",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/ano-nui: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/barrier-reef",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/barrier-reef: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/haulani",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/haulani: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/ho-okipa-ultra-m",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/ho-okipa-ultra-m: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/ho-okipa-r-lite",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/ho-okipa-r-lite: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/kanaio-coast",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/kanaio-coast: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/kaiwi-channel",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/kaiwi-channel: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/ho-okipa-ultra-r",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/ho-okipa-ultra-r: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/kipahulu",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/kipahulu: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/keha-af",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/keha-af: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/keha",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/keha: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/m-koi-af",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/m-koi-af: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/m-koi",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/m-koi: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/local-kine",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/local-kine: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/ma-ukele",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/ma-ukele: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/mangroves",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/mangroves: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/malu",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/malu: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/southern-cross",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/southern-cross: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/stingray",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/stingray: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/peahi",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/peahi: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/uila",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/uila: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/twin-falls",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/twin-falls: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    },
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/wrap/world-cup",
+      "error": "Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/world-cup: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+    }
+  ],
+  "result": "aborted: too many failures, previous feed kept",
+  "log": [
+    "20:53:48 try 1 https://www.mauijim.com/shop/sunglasses/wrap/mangroves: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/mangroves: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:53:49 litescrape 503 2.9s 90B https://www.mauijim.com/shop/sunglasses/wrap/malu",
+    "20:53:49 try 1 https://www.mauijim.com/shop/sunglasses/wrap/malu: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/malu: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:53:55 litescrape 503 2.2s 90B https://www.mauijim.com/shop/sunglasses/wrap/ma-ukele",
+    "20:53:55 try 2 https://www.mauijim.com/shop/sunglasses/wrap/ma-ukele: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/ma-ukele: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:53:56 litescrape 503 2.4s 90B https://www.mauijim.com/shop/sunglasses/wrap/mangroves",
+    "20:53:56 try 2 https://www.mauijim.com/shop/sunglasses/wrap/mangroves: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/mangroves: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:53:56 litescrape 503 2.3s 90B https://www.mauijim.com/shop/sunglasses/wrap/malu",
+    "20:53:56 try 2 https://www.mauijim.com/shop/sunglasses/wrap/malu: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/malu: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:54:08 litescrape 503 2.7s 90B https://www.mauijim.com/shop/sunglasses/wrap/ma-ukele",
+    "20:54:08 try 3 https://www.mauijim.com/shop/sunglasses/wrap/ma-ukele: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/ma-ukele: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:54:08 litescrape 503 2.2s 90B https://www.mauijim.com/shop/sunglasses/wrap/mangroves",
+    "20:54:08 try 3 https://www.mauijim.com/shop/sunglasses/wrap/mangroves: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/mangroves: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:54:08 litescrape 503 2.3s 90B https://www.mauijim.com/shop/sunglasses/wrap/malu",
+    "20:54:08 try 3 https://www.mauijim.com/shop/sunglasses/wrap/malu: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/malu: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:54:23 FAIL https://www.mauijim.com/shop/sunglasses/wrap/ma-ukele: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/ma-ukele: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}",
+    "20:54:23 FAIL https://www.mauijim.com/shop/sunglasses/wrap/mangroves: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/mangroves: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}",
+    "20:54:23 FAIL https://www.mauijim.com/shop/sunglasses/wrap/malu: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/malu: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}",
+    "20:54:27 litescrape 503 2.2s 90B https://www.mauijim.com/shop/sunglasses/wrap/southern-cross",
+    "20:54:27 try 1 https://www.mauijim.com/shop/sunglasses/wrap/southern-cross: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/southern-cross: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:54:27 litescrape 503 2.3s 90B https://www.mauijim.com/shop/sunglasses/wrap/stingray",
+    "20:54:27 try 1 https://www.mauijim.com/shop/sunglasses/wrap/stingray: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/stingray: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:54:27 litescrape 503 2.7s 90B https://www.mauijim.com/shop/sunglasses/wrap/peahi",
+    "20:54:27 try 1 https://www.mauijim.com/shop/sunglasses/wrap/peahi: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/peahi: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:54:34 litescrape 503 2.0s 90B https://www.mauijim.com/shop/sunglasses/wrap/southern-cross",
+    "20:54:34 try 2 https://www.mauijim.com/shop/sunglasses/wrap/southern-cross: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/southern-cross: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:54:34 litescrape 503 2.2s 90B https://www.mauijim.com/shop/sunglasses/wrap/stingray",
+    "20:54:34 try 2 https://www.mauijim.com/shop/sunglasses/wrap/stingray: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/stingray: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:54:35 litescrape 503 2.4s 90B https://www.mauijim.com/shop/sunglasses/wrap/peahi",
+    "20:54:35 try 2 https://www.mauijim.com/shop/sunglasses/wrap/peahi: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/peahi: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:54:47 litescrape 503 2.7s 90B https://www.mauijim.com/shop/sunglasses/wrap/southern-cross",
+    "20:54:47 try 3 https://www.mauijim.com/shop/sunglasses/wrap/southern-cross: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/southern-cross: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:54:47 litescrape 503 2.3s 90B https://www.mauijim.com/shop/sunglasses/wrap/stingray",
+    "20:54:47 try 3 https://www.mauijim.com/shop/sunglasses/wrap/stingray: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/stingray: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:54:47 litescrape 503 2.1s 90B https://www.mauijim.com/shop/sunglasses/wrap/peahi",
+    "20:54:47 try 3 https://www.mauijim.com/shop/sunglasses/wrap/peahi: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/peahi: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:55:02 FAIL https://www.mauijim.com/shop/sunglasses/wrap/southern-cross: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/southern-cross: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}",
+    "20:55:02 FAIL https://www.mauijim.com/shop/sunglasses/wrap/stingray: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/stingray: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}",
+    "20:55:02 FAIL https://www.mauijim.com/shop/sunglasses/wrap/peahi: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/peahi: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}",
+    "20:55:06 litescrape 503 2.3s 90B https://www.mauijim.com/shop/sunglasses/wrap/twin-falls",
+    "20:55:06 try 1 https://www.mauijim.com/shop/sunglasses/wrap/twin-falls: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/twin-falls: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:55:06 litescrape 503 2.3s 90B https://www.mauijim.com/shop/sunglasses/wrap/uila",
+    "20:55:06 try 1 https://www.mauijim.com/shop/sunglasses/wrap/uila: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/uila: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:55:06 litescrape 503 2.5s 90B https://www.mauijim.com/shop/sunglasses/wrap/world-cup",
+    "20:55:06 try 1 https://www.mauijim.com/shop/sunglasses/wrap/world-cup: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/world-cup: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:55:13 litescrape 503 2.1s 90B https://www.mauijim.com/shop/sunglasses/wrap/uila",
+    "20:55:13 try 2 https://www.mauijim.com/shop/sunglasses/wrap/uila: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/uila: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:55:13 litescrape 503 2.3s 90B https://www.mauijim.com/shop/sunglasses/wrap/twin-falls",
+    "20:55:13 try 2 https://www.mauijim.com/shop/sunglasses/wrap/twin-falls: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/twin-falls: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:55:14 litescrape 503 2.6s 90B https://www.mauijim.com/shop/sunglasses/wrap/world-cup",
+    "20:55:14 try 2 https://www.mauijim.com/shop/sunglasses/wrap/world-cup: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/world-cup: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:55:25 litescrape 503 2.1s 90B https://www.mauijim.com/shop/sunglasses/wrap/uila",
+    "20:55:25 try 3 https://www.mauijim.com/shop/sunglasses/wrap/uila: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/uila: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:55:25 litescrape 503 2.3s 90B https://www.mauijim.com/shop/sunglasses/wrap/twin-falls",
+    "20:55:25 try 3 https://www.mauijim.com/shop/sunglasses/wrap/twin-falls: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/twin-falls: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:55:26 litescrape 503 2.4s 90B https://www.mauijim.com/shop/sunglasses/wrap/world-cup",
+    "20:55:26 try 3 https://www.mauijim.com/shop/sunglasses/wrap/world-cup: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/world-cup: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"} ",
+    "20:55:40 FAIL https://www.mauijim.com/shop/sunglasses/wrap/uila: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/uila: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}",
+    "20:55:40 FAIL https://www.mauijim.com/shop/sunglasses/wrap/twin-falls: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/twin-falls: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}",
+    "20:55:41 FAIL https://www.mauijim.com/shop/sunglasses/wrap/world-cup: Litescrape HTTP 503 for https://www.mauijim.com/shop/sunglasses/wrap/world-cup: {\"error\":\"The scraper could not complete the request.\",\"error_code\":\"service_unavailable\"}"
+  ],
+  "litescrape_calls": 534
 }
