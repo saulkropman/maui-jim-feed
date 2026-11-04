@@ -17,13 +17,14 @@
   "litescrape_calls": 1,
   "litescrape_not_us_retries": 0,
   "skus": 1696,
-  "skus_changed": 837,
+  "skus_changed": 51,
   "changes": {
     "price": 0,
     "stock": 8,
-    "content": 823,
+    "content": 0,
     "reviews": 45,
     "new_sku": 0,
     "removed_sku": 0
-  }
+  },
+  "note": "activities column filled for the first time; those entries removed from change files by hand"
 }
