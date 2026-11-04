@@ -11,6 +11,10 @@ on:
         description: 'Only scrape this many products (0 = all). For testing.'
         required: false
         default: '0'
+      provider:
+        description: 'auto (Litescrape, ZenRows if it is down), litescrape, or zenrows'
+        required: false
+        default: 'auto'
 
 permissions:
   contents: write
@@ -36,6 +40,8 @@ jobs:
           # Set LITESCRAPE_API_KEY (preferred) or SCRAPER_URL_TEMPLATE as a repo secret.
           SCRAPER_URL_TEMPLATE: ${{ secrets.SCRAPER_URL_TEMPLATE }}
           LITESCRAPE_API_KEY: ${{ secrets.LITESCRAPE_API_KEY }}
+          ZENROWS_API_KEY: ${{ secrets.ZENROWS_API_KEY }}
+          PROVIDER: ${{ github.event.inputs.provider || 'auto' }}
         run: node src/run.mjs
       - name: Save results to the repo
         if: always()

@@ -18,10 +18,15 @@ const TEMPLATE = process.env.SCRAPER_URL_TEMPLATE || '';
 // Litescrape (https://litescrape.com): set LITESCRAPE_API_KEY to route every page through it.
 const LITESCRAPE_KEY = process.env.LITESCRAPE_API_KEY || '';
 const LITESCRAPE_BASE = (process.env.LITESCRAPE_API_URL || 'https://api.litescrape.com').replace(/\/$/, '');
-const VIA_SERVICE = !!(TEMPLATE || LITESCRAPE_KEY);
+// ZenRows (https://www.zenrows.com): backup when Litescrape is down. Uses a US server directly.
+const ZENROWS_KEY = process.env.ZENROWS_API_KEY || '';
+// PROVIDER: auto (Litescrape, switch to ZenRows if it's down), litescrape, or zenrows.
+const WANT = (process.env.PROVIDER || 'auto').toLowerCase();
+let PROVIDER = WANT === 'zenrows' && ZENROWS_KEY ? 'zenrows' : LITESCRAPE_KEY ? 'litescrape' : ZENROWS_KEY ? 'zenrows' : '';
+const VIA_SERVICE = !!(TEMPLATE || LITESCRAPE_KEY || ZENROWS_KEY);
 // Direct requests must be slow to avoid bot blocking; a scraping service rotates IPs so can go faster.
-const FETCH_MODE = LITESCRAPE_KEY ? 'litescrape' : TEMPLATE ? 'url-template' : 'direct (no scraping-service secret found)';
-const CONCURRENCY = Number(process.env.CONCURRENCY || (LITESCRAPE_KEY ? 3 : 1));
+const fetchMode = () => PROVIDER || (TEMPLATE ? 'url-template' : 'direct (no scraping-service secret found)');
+const CONCURRENCY = Number(process.env.CONCURRENCY || (PROVIDER ? 3 : 1));
 const DELAY_MS = Number(process.env.DELAY_MS || (VIA_SERVICE ? 1500 : 6000));
 const MIN_OK_SHARE = 0.8; // below this, keep the old feed and fail the run
 
@@ -100,8 +105,40 @@ async function litescrape(url, kind) {
   throw new Error('could not get the US store after 8 tries');
 }
 
+let ZR_CALLS = 0;
+async function zenrowsOnce(url) {
+  ZR_CALLS++;
+  const q = new URLSearchParams({ apikey: ZENROWS_KEY, url, premium_proxy: 'true', proxy_country: 'us', original_status: 'true' });
+  const t0 = Date.now();
+  const res = await fetch('https://api.zenrows.com/v1/?' + q, { signal: AbortSignal.timeout(130000) });
+  const text = await res.text();
+  log(`zenrows ${res.status} ${((Date.now() - t0) / 1000).toFixed(1)}s ${text.length}B ${url}`);
+  if (res.status === 404) return { status: 404, text: '' };
+  if (!res.ok) throw new Error(`ZenRows HTTP ${res.status} for ${url}: ${text.slice(0, 300).replace(/\s+/g, ' ')}`);
+  return { status: 200, text };
+}
+async function zenrows(url, kind) {
+  const isUS = kind === 'page' ? isUSPage : kind === 'api' ? isUSApi : () => true;
+  let notFound = 0;
+  for (let a = 1; a <= 4; a++) {
+    const r = await zenrowsOnce(url);
+    if (r.status === 404) { if (++notFound >= 2) return r; continue; }
+    if (isUS(r.text)) return r;
+    log(`zenrows: not the US store (try ${a}), retrying ${url}`);
+  }
+  throw new Error('ZenRows could not get the US store after 4 tries');
+}
+
 async function get(url, tries = 3, kind = 'page') {
-  if (LITESCRAPE_KEY) {
+  if (PROVIDER === 'zenrows') {
+    let last;
+    for (let t = 1; t <= tries; t++) {
+      try { return await zenrows(url, kind); }
+      catch (e) { last = e; log(`try ${t} ${url}: ${e.message} ${e.cause || ''}`); await sleep(5000 * t); }
+    }
+    throw last;
+  }
+  if (PROVIDER === 'litescrape') {
     let last;
     for (let t = 1; t <= tries; t++) {
       try { return await litescrape(url, kind); }
@@ -146,7 +183,7 @@ async function productUrls(prevRows) {
       sources[cat] = 'ok';
     } catch (e) { sources[cat] = 'failed: ' + e.message; log(`listing ${cat} failed: ${e.message}`); }
   }
-  if (!LITESCRAPE_KEY) {
+  if (PROVIDER !== 'litescrape') {
     try {
       const { text } = await get(BASE + '/sitemap/en-us.xml', 3, 'sitemap');
       for (const m of text.matchAll(/https:\/\/www\.mauijim\.com\/shop\/[^\s<>"'&]+/g)) found.add(m[0].replace(/\/$/, ''));
@@ -180,21 +217,23 @@ async function main() {
       log(`last good run ${ageH.toFixed(1)}h ago (${last.result}): backup run going ahead`);
     } catch { log('no previous run report: backup run going ahead'); }
   }
-  log('fetch mode: ' + FETCH_MODE);
-  if (LITESCRAPE_KEY) { // free call: confirms the key and API address before any paid fetches
+  log('fetch mode: ' + fetchMode());
+  if (PROVIDER === 'litescrape') { // free call: confirms the key and API address before any paid fetches
     const r = await fetch(LITESCRAPE_BASE + '/api/keys/status', { headers: { authorization: 'Bearer ' + LITESCRAPE_KEY, accept: 'application/json' }, signal: AbortSignal.timeout(30000) });
     // Log only the call balance: run logs are public on a public repo.
     let info = {}; try { info = await r.json(); } catch {}
     log(`litescrape key check ${r.status}: status=${info.status ?? '?'} remaining_calls=${info.remaining_calls ?? '?'}`);
-    if (!r.ok) throw new Error(`Litescrape key check failed: HTTP ${r.status} ${info.error_code || info.error || ''}`);
+    if (!r.ok && ZENROWS_KEY) { log(`Litescrape key check failed (HTTP ${r.status}): switching to ZenRows`); PROVIDER = 'zenrows'; }
+    else if (!r.ok) throw new Error(`Litescrape key check failed: HTTP ${r.status} ${info.error_code || info.error || ''}`);
     // Litescrape has had outages of a few hours. Check it can fetch a page before starting;
     // if it can't, wait and try again (default: every 20 minutes for up to 2 hours).
     const tries = Number(process.env.HEALTH_TRIES ?? 7), waitMs = Number(process.env.HEALTH_WAIT_MS ?? 1200000);
-    for (let t = 1; ; t++) {
+    for (let t = 1; PROVIDER === 'litescrape'; t++) {
       let up = false, why = '';
       try { const h = await litescrapeOnce(BASE + '/shop/sunglasses/rectangular/hiapo-asian-fit', 'page'); up = h.status === 200 || h.status === 404; }
       catch (e) { why = e.message; }
       if (up) { log(`litescrape health check ok (try ${t})`); break; }
+      if (ZENROWS_KEY) { log(`litescrape looks down: switching to ZenRows for this run (${why.slice(0, 120)})`); PROVIDER = 'zenrows'; break; }
       if (t >= tries) throw new Error(`Litescrape still down after ${t} checks over ${((t - 1) * waitMs / 60000).toFixed(0)} minutes: ${why.slice(0, 200)}`);
       log(`litescrape looks down (check ${t}): ${why.slice(0, 120)}. Waiting ${waitMs / 60000} minutes`);
       await sleep(waitMs);
@@ -248,6 +287,7 @@ async function main() {
   if (failed.length && failed.length <= urls.length * 0.2) {
     const retry = failed.splice(0).map(f => f.url);
     log(`second pass for ${retry.length} failed pages`);
+    if (PROVIDER === 'litescrape' && ZENROWS_KEY) { PROVIDER = 'zenrows'; log('second pass uses ZenRows'); }
     await sleep(Number(process.env.SECOND_PASS_WAIT_MS ?? 30000));
     urls.push(...retry); // the workers read from urls[cursor]
     await Promise.all(Array.from({ length: Math.min(CONCURRENCY, retry.length) }, worker));
@@ -260,9 +300,9 @@ async function main() {
   }
 
   const okProducts = urls.length - failed.length - gone.length - notFoundKept.length;
-  const report = { run_utc: now, fetch_mode: FETCH_MODE, product_sources: sources, products_new_from_listing: added, products_gone: gone, products_404_kept: notFoundKept, products_checked: urls.length, products_ok: okProducts, products_failed: failed.length, failed };
+  const report = { run_utc: now, fetch_mode: fetchMode(), product_sources: sources, products_new_from_listing: added, products_gone: gone, products_404_kept: notFoundKept, products_checked: urls.length, products_ok: okProducts, products_failed: failed.length, failed };
   if (!LIMIT && okProducts < (urls.length - gone.length - notFoundKept.length) * MIN_OK_SHARE) {
-    report.result = 'aborted: too many failures, previous feed kept'; report.log = LOG; report.litescrape_calls = LS_CALLS;
+    report.result = 'aborted: too many failures, previous feed kept'; report.log = LOG; report.litescrape_calls = LS_CALLS; report.zenrows_calls = ZR_CALLS;
     fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify(report, null, 2));
     console.error(report.result); process.exit(1);
   }
@@ -310,7 +350,7 @@ async function main() {
 
   const count = t => changes.filter(c => c.change_type === t).length;
   Object.assign(report, {
-    result: 'ok', litescrape_calls: LS_CALLS, litescrape_not_us_retries: LS_NOT_US, skus: next.length, skus_changed: changedSkus.size,
+    result: 'ok', zenrows_calls: ZR_CALLS, litescrape_calls: LS_CALLS, litescrape_not_us_retries: LS_NOT_US, skus: next.length, skus_changed: changedSkus.size,
     changes: { price: count('price'), stock: count('stock'), content: count('content'), reviews: count('reviews'), new_sku: count('new_sku'), removed_sku: count('removed_sku') },
   });
   fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify(report, null, 2));
@@ -321,7 +361,7 @@ main().catch(e => {
   console.error(e);
   try {
     fs.mkdirSync(DATA, { recursive: true });
-    fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify({ run_utc: now, fetch_mode: FETCH_MODE, result: 'error', error: String(e?.stack || e), cause: String(e?.cause || ''), log: LOG }, null, 2));
+    fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify({ run_utc: now, fetch_mode: fetchMode(), result: 'error', error: String(e?.stack || e), cause: String(e?.cause || ''), log: LOG }, null, 2));
   } catch {}
   process.exit(1);
 });

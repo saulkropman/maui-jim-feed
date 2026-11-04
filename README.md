@@ -41,11 +41,14 @@ checked and refetched (up to 8 times) until it is the US store.
 - Pages are fetched one at a time: about 1.5 seconds apart through a scraping service,
   or 6 seconds apart for direct requests (direct only works from a home connection).
 
-## Litescrape outages
+## Litescrape outages and the ZenRows backup
 
-Each run first checks Litescrape can fetch a page. If not, it waits 20 minutes and checks
-again, up to 2 hours (`HEALTH_TRIES`, `HEALTH_WAIT_MS`). If it is still down, the run fails
-and the previous feed is kept.
+Each run first checks Litescrape can fetch a page. If not, and the `ZENROWS_API_KEY` secret is
+set, the run switches to ZenRows (US server, premium proxy). Pages Litescrape fails on mid-run
+are also retried through ZenRows. Without ZenRows, the run waits 20 minutes and checks again,
+up to 2 hours (`HEALTH_TRIES`, `HEALTH_WAIT_MS`), then fails and keeps the previous feed.
+
+To test ZenRows: Actions > Run workflow > provider `zenrows`, limit `5`.
 
 ## Setup: scraping service (required)
 
