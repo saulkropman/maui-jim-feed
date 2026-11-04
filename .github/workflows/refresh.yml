@@ -22,7 +22,7 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 200  # up to 2h waiting out a Litescrape outage + the run itself
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

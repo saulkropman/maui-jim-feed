@@ -187,6 +187,18 @@ async function main() {
     let info = {}; try { info = await r.json(); } catch {}
     log(`litescrape key check ${r.status}: status=${info.status ?? '?'} remaining_calls=${info.remaining_calls ?? '?'}`);
     if (!r.ok) throw new Error(`Litescrape key check failed: HTTP ${r.status} ${info.error_code || info.error || ''}`);
+    // Litescrape has had outages of a few hours. Check it can fetch a page before starting;
+    // if it can't, wait and try again (default: every 20 minutes for up to 2 hours).
+    const tries = Number(process.env.HEALTH_TRIES ?? 7), waitMs = Number(process.env.HEALTH_WAIT_MS ?? 1200000);
+    for (let t = 1; ; t++) {
+      let up = false, why = '';
+      try { const h = await litescrapeOnce(BASE + '/shop/sunglasses/rectangular/hiapo-asian-fit', 'page'); up = h.status === 200 || h.status === 404; }
+      catch (e) { why = e.message; }
+      if (up) { log(`litescrape health check ok (try ${t})`); break; }
+      if (t >= tries) throw new Error(`Litescrape still down after ${t} checks over ${((t - 1) * waitMs / 60000).toFixed(0)} minutes: ${why.slice(0, 200)}`);
+      log(`litescrape looks down (check ${t}): ${why.slice(0, 120)}. Waiting ${waitMs / 60000} minutes`);
+      await sleep(waitMs);
+    }
   }
   const prevRows = fs.existsSync(FEED) ? parseCSV(fs.readFileSync(FEED, 'utf8')) : [];
   const prev = new Map(prevRows.map(r => [r.sku, r]));

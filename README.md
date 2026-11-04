@@ -41,6 +41,12 @@ checked and refetched (up to 8 times) until it is the US store.
 - Pages are fetched one at a time: about 1.5 seconds apart through a scraping service,
   or 6 seconds apart for direct requests (direct only works from a home connection).
 
+## Litescrape outages
+
+Each run first checks Litescrape can fetch a page. If not, it waits 20 minutes and checks
+again, up to 2 hours (`HEALTH_TRIES`, `HEALTH_WAIT_MS`). If it is still down, the run fails
+and the previous feed is kept.
+
 ## Setup: scraping service (required)
 
 Maui Jim's bot protection blocks GitHub's servers (tested 28 Oct 2026: connection timed
