@@ -1,34 +1,27 @@
 {
-  "run_utc": "2026-11-03T20:17:30.833Z",
+  "run_utc": "2026-11-04T08:17:15.576Z",
   "fetch_mode": "litescrape",
   "product_sources": {
     "sunglasses-product-grouping": "ok"
   },
-  "products_new_from_listing": [
-    "https://www.mauijim.com/shop/sunglasses/aviator/h-lawa",
-    "https://www.mauijim.com/shop/sunglasses/rectangular/paikini",
-    "https://www.mauijim.com/shop/sunglasses/cateye/k-lawa",
-    "https://www.mauijim.com/shop/sunglasses/classic/halakea"
-  ],
+  "products_new_from_listing": [],
   "products_gone": [],
-  "products_404_kept": [
-    "https://www.mauijim.com/shop/sunglasses/classic/kalaunu-asian-fit"
-  ],
+  "products_404_kept": [],
   "products_checked": 177,
-  "products_ok": 176,
+  "products_ok": 177,
   "products_failed": 0,
   "failed": [],
   "result": "ok",
-  "litescrape_calls": 505,
-  "litescrape_not_us_retries": 290,
+  "litescrape_calls": 215,
+  "litescrape_not_us_retries": 34,
   "skus": 1688,
-  "skus_changed": 63,
+  "skus_changed": 37,
   "changes": {
     "price": 0,
-    "stock": 8,
-    "content": 24,
-    "reviews": 8,
-    "new_sku": 23,
+    "stock": 37,
+    "content": 0,
+    "reviews": 0,
+    "new_sku": 0,
     "removed_sku": 0
   }
 }
