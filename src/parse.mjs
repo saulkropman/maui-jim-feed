@@ -94,6 +94,7 @@ export function parseProduct(html, productUrl) {
     rating: o?.rating?.averageRating ?? ld.aggregateRating?.ratingValue ?? '',
     review_count: o?.rating?.reviewCount ?? ld.aggregateRating?.reviewCount ?? '',
     badges: arr(o?.badges).map(b => b.label || b.text || b.displayName || b).sort().join(' | '),
+    activities: arr(o?.activities).map(a => a.label || a.title || a.name || a).filter(a => typeof a === 'string').join(' | '),
     fitting_guide_url: clean(o?.fittingGuideHref),
     currency: o?.priceCurrency || offer.priceCurrency || '',
   };
@@ -192,7 +193,7 @@ function summary(r) {
 export const COLUMNS = ['product_name', 'variant_code', 'category', 'sub_category', 'sku', 'manufacturer_product_number', 'reader_power',
   'frame_colour', 'lens_colour', 'lens_material', 'lens_treatment', 'price', 'was_price', 'in_stock', 'stock_message',
   'gender', 'frame_material', 'frame_style', 'size', 'temple_mm', 'eye_mm', 'bridge_mm', 'lens_height_mm', 'base_curve',
-  'rating', 'review_count', 'badges', 'description', 'ai_summary', 'all_frame_colours', 'main_image_url', 'image_urls',
+  'rating', 'review_count', 'badges', 'activities', 'description', 'ai_summary', 'all_frame_colours', 'main_image_url', 'image_urls',
   'frame_colour_id', 'product_url', 'variant_url'];
 
 export { BASE };

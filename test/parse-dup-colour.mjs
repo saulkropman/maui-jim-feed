@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { parseProduct } from '../src/parse.mjs';
 const acc = (sku, lens) => [{ id: 'additional-information', richDescription: '<p>Desc</p>', factGroups: [{ items: [`SKU: ${sku}`, `Lens Color: ${lens}`, 'Lens Treatment: Polarized'] }] }];
 const props = {
-  title: 'HONI', productCode: 'R758-02', priceValue: 279, priceCurrency: 'USD', inStock: true,
+  title: 'HONI', activities: ['Driving', 'Hiking', 'Running'], productCode: 'R758-02', priceValue: 279, priceCurrency: 'USD', inStock: true,
   accordionItems: acc('R758-02/MJ0758S-026', 'Maui Rose'),
   frameColorSwatches: [{ id: 'Z0021::R758-02', label: 'Shiny Black' }, { id: 'Z0021::758-02', label: 'Shiny Black' }],
   frameColorMedia: { 'Z0021::R758-02': [{ src: 'https://img/r' }], 'Z0021::758-02': [{ src: 'https://img/n' }] },
@@ -26,4 +26,5 @@ assert.equal(by['758-02'].manufacturer_product_number, 'MJ0758S-004');
 assert.equal(by['R758-02'].lens_colour, 'Maui Rose');
 assert.equal(by['R758-02'].variant_code, 'R758-02');
 assert.equal(by['R758-02'].main_image_url, 'https://img/r');
+assert.equal(by['R758-02'].activities, 'Driving | Hiking | Running');
 console.log('parse-dup-colour: ok', rows.map(r => `${r.sku}/${r.variant_code}/${r.lens_colour}/${r.frame_colour_id}`).join('  '));

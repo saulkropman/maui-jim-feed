@@ -164,7 +164,7 @@ const PRICE = ['price', 'was_price', 'currency'];
 const STOCK = ['in_stock', 'stock_message'];
 const REVIEWS = ['rating', 'review_count'];
 const IGNORE = new Set(['ai_summary', 'last_changed_utc', 'last_checked_utc']);
-const LIST_FIELDS = new Set(['all_frame_colours', 'badges']);
+const LIST_FIELDS = new Set(['all_frame_colours', 'badges', 'activities']);
 const sameList = (a, b) => String(a ?? '').split(' | ').sort().join('|') === String(b ?? '').split(' | ').sort().join('|');
 const typeOf = f => PRICE.includes(f) ? 'price' : STOCK.includes(f) ? 'stock' : REVIEWS.includes(f) ? 'reviews' : 'content';
 
@@ -275,12 +275,14 @@ async function main() {
 
   // Field-level changes
   const changes = [], changedSkus = new Set();
+  const prevCols = new Set(Object.keys(prevRows[0] || {}));
   for (const r of next) {
     const p = prev.get(r.sku);
     if (!p) { if (prevRows.length) { changes.push({ change_type: 'new_sku', sku: r.sku, product_name: r.product_name, field: '', old_value: '', new_value: r.price }); changedSkus.add(r.sku); } r.last_changed_utc = now; continue; }
     let diff = false;
     for (const f of COLUMNS) {
       if (IGNORE.has(f) || String(p[f] ?? '') === String(r[f] ?? '')) continue;
+      if (!prevCols.has(f)) continue; // new column: not a change on the site
       if (LIST_FIELDS.has(f) && sameList(p[f], r[f])) continue; // only the order changed
       changes.push({ change_type: typeOf(f), sku: r.sku, product_name: r.product_name, field: f, old_value: String(p[f] ?? ''), new_value: String(r[f] ?? '') });
       diff = true;
