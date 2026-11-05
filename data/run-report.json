@@ -1,7 +1,7 @@
 {
-  "run_utc": "2026-11-05T20:17:16.824Z",
+  "run_utc": "2026-11-05T20:24:11.402Z",
   "fetch_mode": "zyte",
-  "second_pass_service": "zenrows",
+  "second_pass_service": "",
   "product_sources": {
     "sunglasses-product-grouping": "ok",
     "sitemap": "ok"
@@ -9,8 +9,8 @@
   "products_new_from_listing": [],
   "products_gone": [],
   "products_404_kept": [],
-  "products_checked": 179,
-  "products_ok": 178,
+  "products_checked": 1,
+  "products_ok": 0,
   "products_failed": 1,
   "failed": [
     {
@@ -18,22 +18,33 @@
       "error": "no product data found"
     }
   ],
+  "log": [
+    "20:24:11 fetch mode: zyte",
+    "20:24:11 previous feed: 1696 SKUs",
+    "20:24:12 zyte 200 0.7s 180511B https://www.mauijim.com/api/products/by-category?categoryName=sunglasses-product-grouping&locale=en-us&currentPage=0&pageSize=100",
+    "20:24:12 zyte 200 0.3s 103201B https://www.mauijim.com/api/products/by-category?categoryName=sunglasses-product-grouping&locale=en-us&currentPage=1&pageSize=100",
+    "20:24:13 zyte 200 0.6s 697596B https://www.mauijim.com/sitemap/en-us.xml",
+    "20:24:13 products: 1 to fetch (0 new from listing) {\"sunglasses-product-grouping\":\"ok\",\"sitemap\":\"ok\"}",
+    "20:24:14 zyte 200 1.2s 57000B https://www.mauijim.com/shop/sunglasses/rectangular/cruzem",
+    "20:24:14 no product data in 57000B from zyte: 5:\"$Sreact.fragment\" 6:\"/_next/static/chunks/2lraikxo2lexk.js\" 7:I[15017,[\"$6\"],\"default\"] 8:I[32656,[\"$6\"],\"default\"] d:I[15563,[\"$6\"],\"OutletBoundary\"] f:\"ViewportBoundary\" 10:I[15563,[\"$6\"],\"$f\"] 1",
+    "20:24:14 FAIL https://www.mauijim.com/shop/sunglasses/rectangular/cruzem: no product data found"
+  ],
   "result": "ok",
   "backup_calls": {
-    "zenrows": 23,
+    "zenrows": 0,
     "brightdata": 0,
-    "zyte": 182
+    "zyte": 4
   },
-  "zenrows_calls": 205,
+  "zenrows_calls": 4,
   "litescrape_calls": 0,
   "litescrape_not_us_retries": 0,
   "skus": 1696,
-  "skus_changed": 27,
+  "skus_changed": 0,
   "changes": {
     "price": 0,
-    "stock": 13,
+    "stock": 0,
     "content": 0,
-    "reviews": 14,
+    "reviews": 0,
     "new_sku": 0,
     "removed_sku": 0
   }
