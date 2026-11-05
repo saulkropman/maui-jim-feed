@@ -27,7 +27,12 @@ const BACKUPS = [['zenrows', ZENROWS_KEY], ['brightdata', BRIGHTDATA_KEY], ['zyt
 const BACKUP = BACKUPS[0] || '';
 // PROVIDER: auto (Litescrape, switch to a backup if it's down), litescrape, zenrows, brightdata or zyte.
 const WANT = (process.env.PROVIDER || 'auto').toLowerCase();
-let PROVIDER = BACKUPS.includes(WANT) ? WANT : LITESCRAPE_KEY ? 'litescrape' : BACKUP;
+// PRIMARY: the service scheduled runs use first (default zyte). Litescrape is used if PRIMARY has no key.
+const PRIMARY = (process.env.PRIMARY || 'zyte').toLowerCase();
+let PROVIDER = BACKUPS.includes(WANT) ? WANT : WANT === 'litescrape' && LITESCRAPE_KEY ? 'litescrape'
+  : BACKUPS.includes(PRIMARY) ? PRIMARY : LITESCRAPE_KEY ? 'litescrape' : BACKUP;
+// Next service to try for pages the main one failed on.
+const fallbackFor = cur => [...BACKUPS, ...(LITESCRAPE_KEY ? ['litescrape'] : [])].find(n => n !== cur) || '';
 const VIA_SERVICE = !!(TEMPLATE || LITESCRAPE_KEY || BACKUP);
 // Direct requests must be slow to avoid bot blocking; a scraping service rotates IPs so can go faster.
 const fetchMode = () => PROVIDER || (TEMPLATE ? 'url-template' : 'direct (no scraping-service secret found)');
@@ -265,6 +270,7 @@ async function main() {
   for (const r of prevRows) { if (!prevByProduct.has(r.product_url)) prevByProduct.set(r.product_url, []); prevByProduct.get(r.product_url).push(r); }
   log(`previous feed: ${prevRows.length} SKUs`);
 
+  const MAIN = PROVIDER; // service used for this run (before any second-pass fallback)
   const { urls: allUrls, added, sources, listed } = await productUrls(prevRows);
   const MISSING_FILE = path.join(DATA, 'missing.json');
   const missingBefore = fs.existsSync(MISSING_FILE) ? JSON.parse(fs.readFileSync(MISSING_FILE, 'utf8')) : {};
@@ -307,7 +313,7 @@ async function main() {
   if (failed.length && failed.length <= urls.length * 0.2) {
     const retry = failed.splice(0).map(f => f.url);
     log(`second pass for ${retry.length} failed pages`);
-    if (PROVIDER === 'litescrape' && BACKUP) { PROVIDER = BACKUP; log(`second pass uses ${BACKUP}`); }
+    const fb = fallbackFor(PROVIDER); if (fb) { PROVIDER = fb; log(`second pass uses ${fb}`); }
     await sleep(Number(process.env.SECOND_PASS_WAIT_MS ?? 30000));
     urls.push(...retry); // the workers read from urls[cursor]
     await Promise.all(Array.from({ length: Math.min(CONCURRENCY, retry.length) }, worker));
@@ -320,7 +326,7 @@ async function main() {
   }
 
   const okProducts = urls.length - failed.length - gone.length - notFoundKept.length;
-  const report = { run_utc: now, fetch_mode: fetchMode(), product_sources: sources, products_new_from_listing: added, products_gone: gone, products_404_kept: notFoundKept, products_checked: urls.length, products_ok: okProducts, products_failed: failed.length, failed };
+  const report = { run_utc: now, fetch_mode: MAIN || fetchMode(), second_pass_service: PROVIDER !== MAIN ? PROVIDER : '', product_sources: sources, products_new_from_listing: added, products_gone: gone, products_404_kept: notFoundKept, products_checked: urls.length, products_ok: okProducts, products_failed: failed.length, failed };
   if (!LIMIT && okProducts < (urls.length - gone.length - notFoundKept.length) * MIN_OK_SHARE) {
     report.result = 'aborted: too many failures, previous feed kept'; report.log = LOG; report.litescrape_calls = LS_CALLS; report.zenrows_calls = ZR_CALLS; report.backup_calls = BACKUP_CALLS;
     fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify(report, null, 2));

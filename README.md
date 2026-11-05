@@ -42,6 +42,13 @@ checked and refetched (up to 8 times) until it is the US store.
 - Pages are fetched one at a time: about 1.5 seconds apart through a scraping service,
   or 6 seconds apart for direct requests (direct only works from a home connection).
 
+## Services
+
+Scheduled runs use **Zyte API** first (`PRIMARY`, default `zyte`; needs `ZYTE_API_KEY`). Pages it
+fails on are retried through the next service with a key (ZenRows, Bright Data, then Litescrape).
+If Zyte has no key, runs use Litescrape as below. To change the main service, set the `PRIMARY`
+env in the workflow (e.g. `litescrape`).
+
 ## Litescrape outages and the ZenRows backup
 
 Each run first checks Litescrape can fetch a page. If not, it switches to the first backup
