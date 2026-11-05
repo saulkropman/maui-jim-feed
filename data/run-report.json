@@ -1,6 +1,6 @@
 {
-  "run_utc": "2026-11-05T08:17:14.070Z",
-  "fetch_mode": "zenrows",
+  "run_utc": "2026-11-05T10:17:59.425Z",
+  "fetch_mode": "zyte",
   "product_sources": {
     "sunglasses-product-grouping": "ok",
     "sitemap": "ok"
@@ -8,26 +8,26 @@
   "products_new_from_listing": [],
   "products_gone": [],
   "products_404_kept": [],
-  "products_checked": 179,
-  "products_ok": 179,
+  "products_checked": 12,
+  "products_ok": 12,
   "products_failed": 0,
   "failed": [],
   "result": "ok",
   "backup_calls": {
-    "zenrows": 187,
+    "zenrows": 0,
     "brightdata": 0,
-    "zyte": 0
+    "zyte": 15
   },
-  "zenrows_calls": 187,
-  "litescrape_calls": 1,
+  "zenrows_calls": 15,
+  "litescrape_calls": 0,
   "litescrape_not_us_retries": 0,
   "skus": 1696,
-  "skus_changed": 26,
+  "skus_changed": 0,
   "changes": {
     "price": 0,
-    "stock": 5,
+    "stock": 0,
     "content": 0,
-    "reviews": 21,
+    "reviews": 0,
     "new_sku": 0,
     "removed_sku": 0
   }
