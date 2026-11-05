@@ -12,7 +12,7 @@ on:
         required: false
         default: '0'
       provider:
-        description: 'auto (Litescrape, ZenRows if it is down), litescrape, or zenrows'
+        description: 'auto (Litescrape, backup if it is down), litescrape, zenrows, brightdata or zyte'
         required: false
         default: 'auto'
 
@@ -41,6 +41,9 @@ jobs:
           SCRAPER_URL_TEMPLATE: ${{ secrets.SCRAPER_URL_TEMPLATE }}
           LITESCRAPE_API_KEY: ${{ secrets.LITESCRAPE_API_KEY }}
           ZENROWS_API_KEY: ${{ secrets.ZENROWS_API_KEY }}
+          BRIGHTDATA_API_KEY: ${{ secrets.BRIGHTDATA_API_KEY }}
+          BRIGHTDATA_ZONE: ${{ secrets.BRIGHTDATA_ZONE }}
+          ZYTE_API_KEY: ${{ secrets.ZYTE_API_KEY }}
           PROVIDER: ${{ github.event.inputs.provider || 'auto' }}
         run: node src/run.mjs
       - name: Save results to the repo

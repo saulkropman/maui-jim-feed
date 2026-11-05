@@ -44,12 +44,13 @@ checked and refetched (up to 8 times) until it is the US store.
 
 ## Litescrape outages and the ZenRows backup
 
-Each run first checks Litescrape can fetch a page. If not, and the `ZENROWS_API_KEY` secret is
-set, the run switches to ZenRows (US server, premium proxy). Pages Litescrape fails on mid-run
-are also retried through ZenRows. Without ZenRows, the run waits 20 minutes and checks again,
+Each run first checks Litescrape can fetch a page. If not, it switches to the first backup
+service that has a key set, in this order: ZenRows (`ZENROWS_API_KEY`), Bright Data Web Unlocker
+(`BRIGHTDATA_API_KEY`, `BRIGHTDATA_ZONE`, default `web_unlocker1`), Zyte API (`ZYTE_API_KEY`).
+All three ask for a US server. Pages Litescrape fails on mid-run are retried through the backup. Without ZenRows, the run waits 20 minutes and checks again,
 up to 2 hours (`HEALTH_TRIES`, `HEALTH_WAIT_MS`), then fails and keeps the previous feed.
 
-To test ZenRows: Actions > Run workflow > provider `zenrows`, limit `5`.
+To test a service: Actions > Run workflow > provider `zenrows`, `brightdata` or `zyte`, limit `5`.
 
 ## Setup: scraping service (required)
 

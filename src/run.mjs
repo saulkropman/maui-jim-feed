@@ -18,12 +18,17 @@ const TEMPLATE = process.env.SCRAPER_URL_TEMPLATE || '';
 // Litescrape (https://litescrape.com): set LITESCRAPE_API_KEY to route every page through it.
 const LITESCRAPE_KEY = process.env.LITESCRAPE_API_KEY || '';
 const LITESCRAPE_BASE = (process.env.LITESCRAPE_API_URL || 'https://api.litescrape.com').replace(/\/$/, '');
-// ZenRows (https://www.zenrows.com): backup when Litescrape is down. Uses a US server directly.
+// Backup services, used when Litescrape is down (first one with a key wins). All ask for a US server,
+// so no country retries are needed.
 const ZENROWS_KEY = process.env.ZENROWS_API_KEY || '';
-// PROVIDER: auto (Litescrape, switch to ZenRows if it's down), litescrape, or zenrows.
+const BRIGHTDATA_KEY = process.env.BRIGHTDATA_API_KEY || '', BRIGHTDATA_ZONE = process.env.BRIGHTDATA_ZONE || 'web_unlocker1';
+const ZYTE_KEY = process.env.ZYTE_API_KEY || '';
+const BACKUPS = [['zenrows', ZENROWS_KEY], ['brightdata', BRIGHTDATA_KEY], ['zyte', ZYTE_KEY]].filter(([, k]) => k).map(([n]) => n);
+const BACKUP = BACKUPS[0] || '';
+// PROVIDER: auto (Litescrape, switch to a backup if it's down), litescrape, zenrows, brightdata or zyte.
 const WANT = (process.env.PROVIDER || 'auto').toLowerCase();
-let PROVIDER = WANT === 'zenrows' && ZENROWS_KEY ? 'zenrows' : LITESCRAPE_KEY ? 'litescrape' : ZENROWS_KEY ? 'zenrows' : '';
-const VIA_SERVICE = !!(TEMPLATE || LITESCRAPE_KEY || ZENROWS_KEY);
+let PROVIDER = BACKUPS.includes(WANT) ? WANT : LITESCRAPE_KEY ? 'litescrape' : BACKUP;
+const VIA_SERVICE = !!(TEMPLATE || LITESCRAPE_KEY || BACKUP);
 // Direct requests must be slow to avoid bot blocking; a scraping service rotates IPs so can go faster.
 const fetchMode = () => PROVIDER || (TEMPLATE ? 'url-template' : 'direct (no scraping-service secret found)');
 const CONCURRENCY = Number(process.env.CONCURRENCY || (PROVIDER ? 3 : 1));
@@ -106,31 +111,46 @@ async function litescrape(url, kind) {
 }
 
 let ZR_CALLS = 0;
-async function zenrowsOnce(url) {
-  ZR_CALLS++;
-  const q = new URLSearchParams({ apikey: ZENROWS_KEY, url, premium_proxy: 'true', proxy_country: 'us', original_status: 'true' });
-  const t0 = Date.now();
-  const res = await fetch('https://api.zenrows.com/v1/?' + q, { signal: AbortSignal.timeout(130000) });
-  const text = await res.text();
-  log(`zenrows ${res.status} ${((Date.now() - t0) / 1000).toFixed(1)}s ${text.length}B ${url}`);
-  if (res.status === 404) return { status: 404, text: '' };
-  if (!res.ok) throw new Error(`ZenRows HTTP ${res.status} for ${url}: ${text.slice(0, 300).replace(/\s+/g, ' ')}`);
+const BACKUP_CALLS = { zenrows: 0, brightdata: 0, zyte: 0 };
+async function backupOnce(url) {
+  ZR_CALLS++; BACKUP_CALLS[PROVIDER]++;
+  const t0 = Date.now(), signal = AbortSignal.timeout(130000);
+  let res;
+  if (PROVIDER === 'zenrows') {
+    const q = new URLSearchParams({ apikey: ZENROWS_KEY, url, premium_proxy: 'true', proxy_country: 'us', original_status: 'true' });
+    res = await fetch('https://api.zenrows.com/v1/?' + q, { signal });
+  } else if (PROVIDER === 'brightdata') {
+    res = await fetch('https://api.brightdata.com/request', { method: 'POST', signal,
+      headers: { authorization: 'Bearer ' + BRIGHTDATA_KEY, 'content-type': 'application/json' },
+      body: JSON.stringify({ zone: BRIGHTDATA_ZONE, url, format: 'raw', country: 'us' }) });
+  } else if (PROVIDER === 'zyte') {
+    res = await fetch('https://api.zyte.com/v1/extract', { method: 'POST', signal,
+      headers: { authorization: 'Basic ' + Buffer.from(ZYTE_KEY + ':').toString('base64'), 'content-type': 'application/json' },
+      body: JSON.stringify({ url, httpResponseBody: true, geolocation: 'US' }) });
+  } else throw new Error('no backup service configured');
+  let text = await res.text(), status = res.status;
+  if (PROVIDER === 'zyte' && res.ok) { // JSON wrapper: { statusCode, httpResponseBody (base64) }
+    const j = JSON.parse(text); status = j.statusCode || 200; text = j.httpResponseBody ? Buffer.from(j.httpResponseBody, 'base64').toString('utf8') : '';
+  }
+  log(`${PROVIDER} ${status} ${((Date.now() - t0) / 1000).toFixed(1)}s ${text.length}B ${url}`);
+  if (status === 404) return { status: 404, text: '' };
+  if (!res.ok || status >= 400) throw new Error(`${PROVIDER} HTTP ${status} for ${url}: ${text.slice(0, 300).replace(/\s+/g, ' ')}`);
   return { status: 200, text };
 }
 async function zenrows(url, kind) {
   const isUS = kind === 'page' ? isUSPage : kind === 'api' ? isUSApi : () => true;
   let notFound = 0;
   for (let a = 1; a <= 4; a++) {
-    const r = await zenrowsOnce(url);
+    const r = await backupOnce(url);
     if (r.status === 404) { if (++notFound >= 2) return r; continue; }
     if (isUS(r.text)) return r;
-    log(`zenrows: not the US store (try ${a}), retrying ${url}`);
+    log(`${PROVIDER}: not the US store (try ${a}), retrying ${url}`);
   }
-  throw new Error('ZenRows could not get the US store after 4 tries');
+  throw new Error(`${PROVIDER} could not get the US store after 4 tries`);
 }
 
 async function get(url, tries = 3, kind = 'page') {
-  if (PROVIDER === 'zenrows') {
+  if (BACKUPS.includes(PROVIDER)) {
     let last;
     for (let t = 1; t <= tries; t++) {
       try { return await zenrows(url, kind); }
@@ -223,7 +243,7 @@ async function main() {
     // Log only the call balance: run logs are public on a public repo.
     let info = {}; try { info = await r.json(); } catch {}
     log(`litescrape key check ${r.status}: status=${info.status ?? '?'} remaining_calls=${info.remaining_calls ?? '?'}`);
-    if (!r.ok && ZENROWS_KEY) { log(`Litescrape key check failed (HTTP ${r.status}): switching to ZenRows`); PROVIDER = 'zenrows'; }
+    if (!r.ok && BACKUP) { log(`Litescrape key check failed (HTTP ${r.status}): switching to ${BACKUP}`); PROVIDER = BACKUP; }
     else if (!r.ok) throw new Error(`Litescrape key check failed: HTTP ${r.status} ${info.error_code || info.error || ''}`);
     // Litescrape has had outages of a few hours. Check it can fetch a page before starting;
     // if it can't, wait and try again (default: every 20 minutes for up to 2 hours).
@@ -233,7 +253,7 @@ async function main() {
       try { const h = await litescrapeOnce(BASE + '/shop/sunglasses/rectangular/hiapo-asian-fit', 'page'); up = h.status === 200 || h.status === 404; }
       catch (e) { why = e.message; }
       if (up) { log(`litescrape health check ok (try ${t})`); break; }
-      if (ZENROWS_KEY) { log(`litescrape looks down: switching to ZenRows for this run (${why.slice(0, 120)})`); PROVIDER = 'zenrows'; break; }
+      if (BACKUP) { log(`litescrape looks down: switching to ${BACKUP} for this run (${why.slice(0, 120)})`); PROVIDER = BACKUP; break; }
       if (t >= tries) throw new Error(`Litescrape still down after ${t} checks over ${((t - 1) * waitMs / 60000).toFixed(0)} minutes: ${why.slice(0, 200)}`);
       log(`litescrape looks down (check ${t}): ${why.slice(0, 120)}. Waiting ${waitMs / 60000} minutes`);
       await sleep(waitMs);
@@ -287,7 +307,7 @@ async function main() {
   if (failed.length && failed.length <= urls.length * 0.2) {
     const retry = failed.splice(0).map(f => f.url);
     log(`second pass for ${retry.length} failed pages`);
-    if (PROVIDER === 'litescrape' && ZENROWS_KEY) { PROVIDER = 'zenrows'; log('second pass uses ZenRows'); }
+    if (PROVIDER === 'litescrape' && BACKUP) { PROVIDER = BACKUP; log(`second pass uses ${BACKUP}`); }
     await sleep(Number(process.env.SECOND_PASS_WAIT_MS ?? 30000));
     urls.push(...retry); // the workers read from urls[cursor]
     await Promise.all(Array.from({ length: Math.min(CONCURRENCY, retry.length) }, worker));
@@ -302,7 +322,7 @@ async function main() {
   const okProducts = urls.length - failed.length - gone.length - notFoundKept.length;
   const report = { run_utc: now, fetch_mode: fetchMode(), product_sources: sources, products_new_from_listing: added, products_gone: gone, products_404_kept: notFoundKept, products_checked: urls.length, products_ok: okProducts, products_failed: failed.length, failed };
   if (!LIMIT && okProducts < (urls.length - gone.length - notFoundKept.length) * MIN_OK_SHARE) {
-    report.result = 'aborted: too many failures, previous feed kept'; report.log = LOG; report.litescrape_calls = LS_CALLS; report.zenrows_calls = ZR_CALLS;
+    report.result = 'aborted: too many failures, previous feed kept'; report.log = LOG; report.litescrape_calls = LS_CALLS; report.zenrows_calls = ZR_CALLS; report.backup_calls = BACKUP_CALLS;
     fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify(report, null, 2));
     console.error(report.result); process.exit(1);
   }
@@ -350,7 +370,7 @@ async function main() {
 
   const count = t => changes.filter(c => c.change_type === t).length;
   Object.assign(report, {
-    result: 'ok', zenrows_calls: ZR_CALLS, litescrape_calls: LS_CALLS, litescrape_not_us_retries: LS_NOT_US, skus: next.length, skus_changed: changedSkus.size,
+    result: 'ok', backup_calls: BACKUP_CALLS, zenrows_calls: ZR_CALLS, litescrape_calls: LS_CALLS, litescrape_not_us_retries: LS_NOT_US, skus: next.length, skus_changed: changedSkus.size,
     changes: { price: count('price'), stock: count('stock'), content: count('content'), reviews: count('reviews'), new_sku: count('new_sku'), removed_sku: count('removed_sku') },
   });
   fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify(report, null, 2));
