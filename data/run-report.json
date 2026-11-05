@@ -1,6 +1,7 @@
 {
-  "run_utc": "2026-11-05T10:17:59.425Z",
+  "run_utc": "2026-11-05T20:17:16.824Z",
   "fetch_mode": "zyte",
+  "second_pass_service": "zenrows",
   "product_sources": {
     "sunglasses-product-grouping": "ok",
     "sitemap": "ok"
@@ -8,26 +9,31 @@
   "products_new_from_listing": [],
   "products_gone": [],
   "products_404_kept": [],
-  "products_checked": 12,
-  "products_ok": 12,
-  "products_failed": 0,
-  "failed": [],
+  "products_checked": 179,
+  "products_ok": 178,
+  "products_failed": 1,
+  "failed": [
+    {
+      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/cruzem",
+      "error": "no product data found"
+    }
+  ],
   "result": "ok",
   "backup_calls": {
-    "zenrows": 0,
+    "zenrows": 23,
     "brightdata": 0,
-    "zyte": 15
+    "zyte": 182
   },
-  "zenrows_calls": 15,
+  "zenrows_calls": 205,
   "litescrape_calls": 0,
   "litescrape_not_us_retries": 0,
   "skus": 1696,
-  "skus_changed": 0,
+  "skus_changed": 27,
   "changes": {
     "price": 0,
-    "stock": 0,
+    "stock": 13,
     "content": 0,
-    "reviews": 0,
+    "reviews": 14,
     "new_sku": 0,
     "removed_sku": 0
   }
