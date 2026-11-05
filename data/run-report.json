@@ -1,5 +1,5 @@
 {
-  "run_utc": "2026-11-05T20:24:11.402Z",
+  "run_utc": "2026-11-05T20:25:10.089Z",
   "fetch_mode": "zyte",
   "second_pass_service": "",
   "product_sources": {
@@ -10,24 +10,17 @@
   "products_gone": [],
   "products_404_kept": [],
   "products_checked": 1,
-  "products_ok": 0,
-  "products_failed": 1,
-  "failed": [
-    {
-      "url": "https://www.mauijim.com/shop/sunglasses/rectangular/cruzem",
-      "error": "no product data found"
-    }
-  ],
+  "products_ok": 1,
+  "products_failed": 0,
+  "failed": [],
   "log": [
-    "20:24:11 fetch mode: zyte",
-    "20:24:11 previous feed: 1696 SKUs",
-    "20:24:12 zyte 200 0.7s 180511B https://www.mauijim.com/api/products/by-category?categoryName=sunglasses-product-grouping&locale=en-us&currentPage=0&pageSize=100",
-    "20:24:12 zyte 200 0.3s 103201B https://www.mauijim.com/api/products/by-category?categoryName=sunglasses-product-grouping&locale=en-us&currentPage=1&pageSize=100",
-    "20:24:13 zyte 200 0.6s 697596B https://www.mauijim.com/sitemap/en-us.xml",
-    "20:24:13 products: 1 to fetch (0 new from listing) {\"sunglasses-product-grouping\":\"ok\",\"sitemap\":\"ok\"}",
-    "20:24:14 zyte 200 1.2s 57000B https://www.mauijim.com/shop/sunglasses/rectangular/cruzem",
-    "20:24:14 no product data in 57000B from zyte: 5:\"$Sreact.fragment\" 6:\"/_next/static/chunks/2lraikxo2lexk.js\" 7:I[15017,[\"$6\"],\"default\"] 8:I[32656,[\"$6\"],\"default\"] d:I[15563,[\"$6\"],\"OutletBoundary\"] f:\"ViewportBoundary\" 10:I[15563,[\"$6\"],\"$f\"] 1",
-    "20:24:14 FAIL https://www.mauijim.com/shop/sunglasses/rectangular/cruzem: no product data found"
+    "20:25:10 fetch mode: zyte",
+    "20:25:10 previous feed: 1696 SKUs",
+    "20:25:14 zyte 200 4.4s 180511B https://www.mauijim.com/api/products/by-category?categoryName=sunglasses-product-grouping&locale=en-us&currentPage=0&pageSize=100",
+    "20:25:19 zyte 200 5.1s 103201B https://www.mauijim.com/api/products/by-category?categoryName=sunglasses-product-grouping&locale=en-us&currentPage=1&pageSize=100",
+    "20:25:20 zyte 200 0.6s 697596B https://www.mauijim.com/sitemap/en-us.xml",
+    "20:25:20 products: 1 to fetch (0 new from listing) {\"sunglasses-product-grouping\":\"ok\",\"sitemap\":\"ok\"}",
+    "20:25:20 zyte 200 0.5s 1320978B https://www.mauijim.com/shop/sunglasses/rectangular/cruzem"
   ],
   "result": "ok",
   "backup_calls": {
