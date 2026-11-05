@@ -28,6 +28,9 @@ function flightRows(html) {
     if (!m) continue;
     try { const a = JSON.parse(m[1]); if (typeof a[1] === 'string') flight += a[1]; } catch {}
   }
+  // Some fetches return the raw Next.js data stream (rows like `5:"$Sreact.fragment"`) instead
+  // of the HTML page. That stream is the same data, so read it directly.
+  if (!flight && !/<html|<script/i.test(html.slice(0, 2000)) && /^\s*[0-9a-f]+:/.test(html)) flight = html;
   const b = new TextEncoder().encode(flight), dec = new TextDecoder();
   const rows = []; let p = 0;
   while (p < b.length) {
