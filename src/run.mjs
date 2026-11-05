@@ -11,7 +11,9 @@ import path from 'node:path';
 import { parseProduct, COLUMNS, BASE } from './parse.mjs';
 
 const DATA = path.resolve(process.env.DATA_DIR || 'data');
-const LIMIT = Number(process.env.LIMIT || 0);
+// ONLY_URLS: comma-separated product URLs to fetch (testing). Treated like a partial (LIMIT) run.
+const ONLY_URLS = (process.env.ONLY_URLS || '').split(',').map(u => u.trim()).filter(Boolean);
+const LIMIT = ONLY_URLS.length || Number(process.env.LIMIT || 0);
 // Optional: route requests through a scraping service if the site blocks the runner.
 // Example: https://api.scraperapi.com/?api_key=KEY&country_code=us&url={url}
 const TEMPLATE = process.env.SCRAPER_URL_TEMPLATE || '';
@@ -276,7 +278,8 @@ async function main() {
   const missingBefore = fs.existsSync(MISSING_FILE) ? JSON.parse(fs.readFileSync(MISSING_FILE, 'utf8')) : {};
   const missingNow = {}, notFoundKept = [];
   let urls = allUrls;
-  if (LIMIT) urls = [...added, ...allUrls.filter(u => !added.includes(u))].slice(0, LIMIT);
+  if (ONLY_URLS.length) urls = ONLY_URLS;
+  else if (LIMIT) urls = [...added, ...allUrls.filter(u => !added.includes(u))].slice(0, LIMIT);
   log(`products: ${urls.length} to fetch (${added.length} new from listing) ${JSON.stringify(sources)}`);
 
   const fresh = [], failed = [], gone = [];
@@ -294,7 +297,7 @@ async function main() {
         }
         else {
           const { rows, ok, reason } = parseProduct(text, url);
-          if (!ok) throw new Error(reason);
+          if (!ok) { log(`no product data in ${text.length}B from ${PROVIDER}: ${text.slice(0, 200).replace(/\s+/g, ' ')}`); throw new Error(reason); }
           if (rows.some(r => r.currency && r.currency !== 'USD')) throw new Error('not USD prices: ' + rows[0].currency);
           fresh.push(...rows.map(r => ({ ...r, last_checked_utc: now })));
           streak = 0;
@@ -376,6 +379,7 @@ async function main() {
 
   const count = t => changes.filter(c => c.change_type === t).length;
   Object.assign(report, {
+    log: LOG,
     result: 'ok', backup_calls: BACKUP_CALLS, zenrows_calls: ZR_CALLS, litescrape_calls: LS_CALLS, litescrape_not_us_retries: LS_NOT_US, skus: next.length, skus_changed: changedSkus.size,
     changes: { price: count('price'), stock: count('stock'), content: count('content'), reviews: count('reviews'), new_sku: count('new_sku'), removed_sku: count('removed_sku') },
   });

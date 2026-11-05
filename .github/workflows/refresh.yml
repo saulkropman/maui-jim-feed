@@ -11,6 +11,10 @@ on:
         description: 'Only scrape this many products (0 = all). For testing.'
         required: false
         default: '0'
+      urls:
+        description: 'Only these product URLs, comma-separated (testing)'
+        required: false
+        default: ''
       provider:
         description: 'auto (Litescrape, backup if it is down), litescrape, zenrows, brightdata or zyte'
         required: false
@@ -35,6 +39,7 @@ jobs:
       - name: Scrape and compare
         env:
           LIMIT: ${{ github.event.inputs.limit || '0' }}
+          ONLY_URLS: ${{ github.event.inputs.urls || '' }}
           SKIP_IF_RECENT_HOURS: ${{ github.event_name == 'schedule' && '6' || '0' }}
           # Required: the site blocks GitHub's servers, so pages go through a scraping service.
           # Set LITESCRAPE_API_KEY (preferred) or SCRAPER_URL_TEMPLATE as a repo secret.
