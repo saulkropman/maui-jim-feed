@@ -30,6 +30,7 @@ checked and refetched (up to 8 times) until it is the US store.
 `reviews`, `new_sku`, `removed_sku`.
 
 `image_urls` is a JSON array, e.g. `["https://...1.jpg","https://...2.jpg"]`.
+`sale` is `true` when there is a crossed-out `was_price` above `price`, otherwise `false`.
 `main_image_url` is the first image. Prices are always USD (pages in other currencies are rejected).
 
 ## Safety

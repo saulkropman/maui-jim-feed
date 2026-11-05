@@ -11,7 +11,7 @@ const props = {
   frameColorVariants: {
     'Z0021': { productCode: '758-02', priceValue: 279 }, // bare extra: no details of its own
     'Z0021::758-02': { productCode: '758-02', lensColorValue: 'Neutral Grey', priceValue: 279, accordionItems: acc('758-02/MJ0758S-004', 'Neutral Grey') },
-    'Z0021::R758-02': { productCode: 'R758-02', lensColorValue: 'Maui Rose', priceValue: 279, accordionItems: acc('R758-02/MJ0758S-026', 'Maui Rose') },
+    'Z0021::R758-02': { productCode: 'R758-02', lensColorValue: 'Maui Rose', priceValue: 209.25, previousPriceValue: 279, accordionItems: acc('R758-02/MJ0758S-026', 'Maui Rose') },
   },
 };
 const flight = '0:' + JSON.stringify(['$', 'div', null, props]) + '\n';
@@ -27,4 +27,7 @@ assert.equal(by['R758-02'].lens_colour, 'Maui Rose');
 assert.equal(by['R758-02'].variant_code, 'R758-02');
 assert.equal(by['R758-02'].main_image_url, 'https://img/r');
 assert.equal(by['R758-02'].activities, 'Driving | Hiking | Running');
+assert.equal(by['R758-02'].sale, 'true');
+assert.equal(by['R758-02'].was_price, '279');
+assert.equal(by['758-02'].sale, 'false');
 console.log('parse-dup-colour: ok', rows.map(r => `${r.sku}/${r.variant_code}/${r.lens_colour}/${r.frame_colour_id}`).join('  '));

@@ -197,7 +197,7 @@ async function productUrls(prevRows) {
 }
 
 // ---------- diff ----------
-const PRICE = ['price', 'was_price', 'currency'];
+const PRICE = ['price', 'was_price', 'sale', 'currency'];
 const STOCK = ['in_stock', 'stock_message'];
 const REVIEWS = ['rating', 'review_count'];
 const IGNORE = new Set(['ai_summary', 'last_changed_utc', 'last_checked_utc']);
