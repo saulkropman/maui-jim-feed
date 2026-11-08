@@ -42,6 +42,13 @@ checked and refetched (up to 8 times) until it is the US store.
 - Pages are fetched one at a time: about 1.5 seconds apart through a scraping service,
   or 6 seconds apart for direct requests (direct only works from a home connection).
 
+## Steadying
+
+The site sometimes sends a page without some details, or with a different review count.
+Text details (description, lens, frame, sizes) that come back blank keep their last good value.
+A new `rating` or `review_count` is only accepted once it shows up in 2 runs in a row
+(`data/pending.json`). Price, sale and stock always update straight away.
+
 ## Services
 
 Scheduled runs use **Zyte API** first (`PRIMARY`, default `zyte`; needs `ZYTE_API_KEY`). Pages it

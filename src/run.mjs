@@ -8,7 +8,7 @@
 //   data/run-report.json            counts, failures, timing
 import fs from 'node:fs';
 import path from 'node:path';
-import { parseProduct, COLUMNS, BASE } from './parse.mjs';
+import { parseProduct, COLUMNS, BASE, summary } from './parse.mjs';
 
 const DATA = path.resolve(process.env.DATA_DIR || 'data');
 // ONLY_URLS: comma-separated product URLs to fetch (testing). Treated like a partial (LIMIT) run.
@@ -340,6 +340,30 @@ async function main() {
   const failedUrls = new Set([...failed.map(f => f.url), ...notFoundKept]);
   const carried = [...failedUrls].flatMap(u => prevByProduct.get(u) || []);
   const live = new Set(urls);
+  // Steadying: the site sometimes sends a page without some details, or with a different review count.
+  // - Text details that come back blank keep their last good value.
+  // - A new rating/review count is only accepted once it shows up in 2 runs in a row.
+  // Price and stock always update straight away.
+  const KEEP_IF_BLANK = ['description', 'lens_treatment', 'lens_material', 'lens_colour', 'frame_material', 'frame_style', 'gender', 'size', 'temple_mm', 'eye_mm', 'bridge_mm', 'lens_height_mm', 'base_curve'];
+  const CONFIRM = ['rating', 'review_count'];
+  const PENDING_FILE = path.join(DATA, 'pending.json');
+  const pendingBefore = fs.existsSync(PENDING_FILE) ? JSON.parse(fs.readFileSync(PENDING_FILE, 'utf8')) : {};
+  const pendingNow = {};
+  let keptBlank = 0, heldBack = 0;
+  for (const r of fresh) {
+    const p = prev.get(r.sku); if (!p) continue;
+    let touched = false;
+    for (const f of KEEP_IF_BLANK) if (!String(r[f] ?? '').trim() && String(p[f] ?? '').trim()) { r[f] = p[f]; keptBlank++; touched = true; }
+    for (const f of CONFIRM) {
+      const now = String(r[f] ?? ''), was = String(p[f] ?? ''), key = r.sku + '|' + f;
+      if (now === was || !(f in p)) continue;
+      if (pendingBefore[key] === now) continue; // seen twice in a row: accept
+      pendingNow[key] = now; r[f] = p[f]; heldBack++; touched = true;
+    }
+    if (touched) r.ai_summary = summary(r);
+  }
+  if (!LIMIT) fs.writeFileSync(PENDING_FILE, JSON.stringify(pendingNow, null, 2) + '\n');
+  log(`steadying: kept ${keptBlank} blank details, held back ${heldBack} review changes for confirmation`);
   const next = [...fresh, ...carried];
 
   // Field-level changes
@@ -380,7 +404,7 @@ async function main() {
   const count = t => changes.filter(c => c.change_type === t).length;
   Object.assign(report, {
     log: LOG,
-    result: 'ok', backup_calls: BACKUP_CALLS, zenrows_calls: ZR_CALLS, litescrape_calls: LS_CALLS, litescrape_not_us_retries: LS_NOT_US, skus: next.length, skus_changed: changedSkus.size,
+    result: 'ok', steadying: { kept_blank: keptBlank, reviews_held_back: heldBack }, backup_calls: BACKUP_CALLS, zenrows_calls: ZR_CALLS, litescrape_calls: LS_CALLS, litescrape_not_us_retries: LS_NOT_US, skus: next.length, skus_changed: changedSkus.size,
     changes: { price: count('price'), stock: count('stock'), content: count('content'), reviews: count('reviews'), new_sku: count('new_sku'), removed_sku: count('removed_sku') },
   });
   fs.writeFileSync(path.join(DATA, 'run-report.json'), JSON.stringify(report, null, 2));

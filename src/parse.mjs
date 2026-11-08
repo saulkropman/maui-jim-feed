@@ -182,7 +182,7 @@ export function parseProduct(html, productUrl) {
   return { rows, ok: rows.length > 0, reason: rows.length ? '' : 'no variants' };
 }
 
-function summary(r) {
+export function summary(r) {
   const kind = r.category === 'sunglasses' ? `${r.sub_category} sunglasses`.trim() : r.category === 'apparel' ? 'apparel' : 'accessory';
   const b = [`${r.product_name} (${kind})`];
   if (r.frame_colour) b.push(`${r.frame_colour} frame` + (r.lens_colour ? ` with ${r.lens_colour} ${r.lens_material} ${r.lens_treatment ? r.lens_treatment.toLowerCase() + ' ' : ''}lenses` : ''));
