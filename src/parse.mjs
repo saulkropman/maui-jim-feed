@@ -172,7 +172,18 @@ export function parseProduct(html, productUrl) {
   // A product can list the same SKU twice; keep the first.
   const seen = new Set();
   const rows = out.filter(r => !seen.has(r.sku) && seen.add(r.sku));
+  // product_id: one ID shared by every colour and reader version of this product, so they can be grouped
+  // (like Google Shopping's item_group_id). Maui Jim part numbers share a model code across colours,
+  // e.g. MJ0655SA-001 / MJ0655SA-004 -> MJ0655SA. Products without part numbers use their first SKU.
+  const models = {};
+  for (const r of rows) { const m = (r.manufacturer_product_number || '').split('-')[0].trim(); if (m) models[m] = (models[m] || 0) + 1; }
+  let productId = Object.entries(models).sort((a, b) => b[1] - a[1])[0]?.[0] || rows[0]?.sku || '';
+  // Reader-only products (e.g. Ho'okipa Reader) share the frame's model code with the normal product,
+  // so they get -R to keep one ID per product.
+  if (/\bREADER\b/i.test(rows[0]?.product_name || '') && models[productId]) productId += '-R';
   for (const r of rows) {
+    r.product_id = productId;
+    r.is_reader = r.reader_power ? 'true' : 'false';
     // variant_code is always the variantCode in the variant link (reader rows share their colour's code).
     r.variant_code = new URL(r.variant_url).searchParams.get('variantCode') || r.variant_code;
     // sale = there is a crossed-out (was) price above the current price.
@@ -195,7 +206,7 @@ export function summary(r) {
   return b.join('. ').replace(/\s+/g, ' ') + '.';
 }
 
-export const COLUMNS = ['product_name', 'variant_code', 'category', 'sub_category', 'sku', 'manufacturer_product_number', 'reader_power',
+export const COLUMNS = ['product_name', 'variant_code', 'product_id', 'category', 'sub_category', 'sku', 'manufacturer_product_number', 'reader_power', 'is_reader',
   'frame_colour', 'lens_colour', 'lens_material', 'lens_treatment', 'price', 'was_price', 'sale', 'in_stock', 'stock_message',
   'gender', 'frame_material', 'frame_style', 'size', 'temple_mm', 'eye_mm', 'bridge_mm', 'lens_height_mm', 'base_curve',
   'rating', 'review_count', 'badges', 'activities', 'description', 'ai_summary', 'all_frame_colours', 'main_image_url', 'image_urls',

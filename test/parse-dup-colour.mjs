@@ -30,4 +30,7 @@ assert.equal(by['R758-02'].activities, 'Driving | Hiking | Running');
 assert.equal(by['R758-02'].sale, 'true');
 assert.equal(by['R758-02'].was_price, '279');
 assert.equal(by['758-02'].sale, 'false');
+assert.equal(by['758-02'].product_id, 'MJ0758S');
+assert.equal(by['R758-02'].product_id, 'MJ0758S');
+assert.equal(by['R758-02'].is_reader, 'false');
 console.log('parse-dup-colour: ok', rows.map(r => `${r.sku}/${r.variant_code}/${r.lens_colour}/${r.frame_colour_id}`).join('  '));

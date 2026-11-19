@@ -30,6 +30,9 @@ checked and refetched (up to 8 times) until it is the US store.
 `reviews`, `new_sku`, `removed_sku`.
 
 `image_urls` is a JSON array, e.g. `["https://...1.jpg","https://...2.jpg"]`.
+`product_id` is shared by every colour and reader version of a product (like Google Shopping's
+`item_group_id`), e.g. `MJ0655SA`. Reader-only products add `-R`. `is_reader` is `true` for reader
+(magnification) rows.
 `sale` is `true` when there is a crossed-out `was_price` above `price`, otherwise `false`.
 `main_image_url` is the first image. Prices are always USD (pages in other currencies are rejected).
 
